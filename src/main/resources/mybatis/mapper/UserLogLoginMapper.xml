@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pq.user.mapper.UserLogLoginMapper" >
+  <resultMap id="BaseResultMap" type="com.pq.user.entity.UserLogLogin" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="CHAR" />
+    <result column="user_agent" property="userAgent" jdbcType="VARCHAR" />
+    <result column="session_id" property="sessionId" jdbcType="VARCHAR" />
+    <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="is_phone" property="isPhone" jdbcType="BIT" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="gt_client_id" property="gtClientId" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pq_user_log_login
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pq.user.entity.UserLogLogin" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pq_user_log_login (user_id, user_agent, session_id, 
+      login_ip, login_time, is_phone, 
+      device_id, gt_client_id)
+    values (#{userId,jdbcType=CHAR}, #{userAgent,jdbcType=VARCHAR}, #{sessionId,jdbcType=VARCHAR}, 
+      #{loginIp,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{isPhone,jdbcType=BIT}, 
+      #{deviceId,jdbcType=VARCHAR}, #{gtClientId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.UserLogLogin" >
+    update pq_user_log_login
+    set user_id = #{userId,jdbcType=CHAR},
+      user_agent = #{userAgent,jdbcType=VARCHAR},
+      session_id = #{sessionId,jdbcType=VARCHAR},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      is_phone = #{isPhone,jdbcType=BIT},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      gt_client_id = #{gtClientId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, user_id, user_agent, session_id, login_ip, login_time, is_phone, device_id, 
+    gt_client_id
+    from pq_user_log_login
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, user_agent, session_id, login_ip, login_time, is_phone, device_id, 
+    gt_client_id
+    from pq_user_log_login
+  </select>
+</mapper>

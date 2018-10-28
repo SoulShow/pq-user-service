@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="gzb_table" targetRuntime="MyBatis3Simple">
+        <!--去除注释  -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://47.92.82.130:3306/db_user"
+                        userId="root"
+                        password="zxapp@2709">
+        </jdbcConnection>
+
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--生成实体类 指定包名 以及生成的地址 （可以自定义地址，但是路径不存在不会自动创建  使用Maven生成在target目录下，会自动创建） -->
+        <javaModelGenerator targetPackage="com.pq.user.entity" targetProject="MAVEN">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成SQLMAP文件 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources/mybatis">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--生成Dao文件 可以配置 type="XMLMAPPER"生成xml的dao实现 ANNOTATEDMAPPER  context id="DB2Tables" 修改targetRuntime="MyBatis3"     -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.pq.user.mapper" targetProject="MAVEN">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="pq_user_third_party" domainObjectName="UserThirdParty">
+             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+             <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+             <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+         </table>
+
+        <table tableName="pq_captcha_type" domainObjectName="CaptchaType">
+        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        </table>
+
+        <table tableName="pq_mobile_captcha" domainObjectName="MobileCaptcha">
+        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        </table>
+
+        <table tableName="pq_user" domainObjectName="User">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="lock_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+            <columnOverride column="register_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+            <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+            <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        </table>
+
+        <table tableName="pq_user_log_login" domainObjectName="UserLogLogin">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="login_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        </table>
+        <table tableName="pq_user_log_modify" domainObjectName="UserLogModify">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        </table>
+    </context>
+</generatorConfiguration>

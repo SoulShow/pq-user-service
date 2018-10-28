@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pq.user.mapper.MobileCaptchaMapper" >
+  <resultMap id="BaseResultMap" type="com.pq.user.entity.MobileCaptcha" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="expired_time" property="expiredTime" jdbcType="TIMESTAMP" />
+    <result column="resent_time" property="resentTime" jdbcType="TIMESTAMP" />
+    <result column="used_time" property="usedTime" jdbcType="TIMESTAMP" />
+    <result column="failures" property="failures" jdbcType="INTEGER" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pq_mobile_captcha
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pq.user.entity.MobileCaptcha" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pq_mobile_captcha (mobile, code, type_id, 
+      created_time, expired_time, resent_time, 
+      used_time, failures, updated_time
+      )
+    values (#{mobile,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{typeId,jdbcType=BIGINT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{expiredTime,jdbcType=TIMESTAMP}, #{resentTime,jdbcType=TIMESTAMP}, 
+      #{usedTime,jdbcType=TIMESTAMP}, #{failures,jdbcType=INTEGER}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.MobileCaptcha" >
+    update pq_mobile_captcha
+    set mobile = #{mobile,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      expired_time = #{expiredTime,jdbcType=TIMESTAMP},
+      resent_time = #{resentTime,jdbcType=TIMESTAMP},
+      used_time = #{usedTime,jdbcType=TIMESTAMP},
+      failures = #{failures,jdbcType=INTEGER},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, mobile, code, type_id, created_time, expired_time, resent_time, used_time, 
+    failures, updated_time
+    from pq_mobile_captcha
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, mobile, code, type_id, created_time, expired_time, resent_time, used_time, 
+    failures, updated_time
+    from pq_mobile_captcha
+  </select>
+</mapper>

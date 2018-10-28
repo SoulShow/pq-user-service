@@ -1,0 +1,142 @@
+package com.pq.user.service;
+
+
+import com.pq.user.auth.AuthCookies;
+import com.pq.user.dto.MiniProgramDto;
+import com.pq.user.dto.RegisterRequestDto;
+import com.pq.user.dto.UserDto;
+import com.pq.user.entity.User;
+import com.pq.user.entity.UserLogLogin;
+
+/**
+ * @author liutao
+ */
+public interface UserService {
+
+    /**
+     * 注册
+     *
+     * @param registerRequestDto
+     * @return
+     * @throws Exception
+     */
+    String register(RegisterRequestDto registerRequestDto);
+
+    /**
+     * 获取用户基本信息
+     *
+     * @param userId
+     * @return
+     */
+    UserDto getUserDtoByUserId(String userId);
+
+    /**
+     * 清除缓存中的用户信息
+     *
+     * @param userId
+     * @throws Exception
+     */
+    void clearUserDtoCacheByUserId(String userId);
+
+    /**
+     * 登陆信息验证
+     *
+     * @param authCookies
+     * @return
+     */
+    boolean validate(AuthCookies authCookies);
+
+    /**
+     * 通过手机号查询用户信息
+     *
+     * @param phone
+     * @return
+     */
+    User getUserByPhone(String phone);
+
+    /**
+     * 清除用户输入密码错误log
+     *
+     * @param userId
+     */
+    void clearUserPasswordErrorLog(String userId);
+
+    /**
+     * 加密
+     *
+     * @param passwordPlain
+     * @return
+     */
+    String encodePassword(String passwordPlain);
+
+
+    /**
+     * 更新用户信息和log信息
+     *
+     * @param userEntity
+     * @param originUserEntity
+     * @param modifyType
+     */
+    void updateUser(User userEntity, User originUserEntity, Integer modifyType);
+
+    /**
+     * 更新用户基本信息
+     *
+     * @param user
+     * @return
+     */
+    void updateUserInfo(User user);
+
+    /**
+     * user 转换为userDto
+     *
+     * @param user
+     * @return
+     */
+    UserDto transformUserEntityToUserDto(User user);
+
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId
+     * @return
+     */
+    User getUserByUserId(String userId);
+
+
+    /**
+     * 获取最近的登录记录
+     *
+     * @param userId
+     * @return
+     */
+    UserLogLogin getLastUserLoginLog(String userId);
+
+    /**
+     * 设置用户密码
+     *
+     * @param userId
+     * @param phone
+     * @param password
+     * @param repPassword
+     */
+    void setPassword(String userId, String phone, String password, String repPassword);
+
+    /**
+     * 创建用户
+     *
+     * @param user
+     */
+    void insert(User user);
+
+    /**
+     * 获取小程序信息
+     * @param code
+     * @return
+     */
+    MiniProgramDto getMiniProgramInfoSessionInfo(String code);
+
+
+
+}
