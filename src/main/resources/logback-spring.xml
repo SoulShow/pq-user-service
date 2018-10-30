@@ -1,48 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <jmxConfigurator/>
+    <!-- 使用 spring-boot 配置需要 springProperty 标签 -->
+    <springProperty scope="context" name="LOG_FILE_PATH" source="pq.log-path" defaultValue="logs" />
 
-    <!-- 异步输出 -->
-    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
-        <discardingThreshold>0</discardingThreshold>
-        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
-        <queueSize>512</queueSize>
-        <!-- 添加附加的appender,最多只能添加一个 -->
-        <appender-ref ref="FILE"/>
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <!--local 作用域在配置文件内有效，context 作用域的有效范围延伸至 logger context，system 作用域的范围最广，整个 JVM 内都有效。-->
+    <property name="level" scope="context" value="info"/>
+
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
     </appender>
 
-    <springProfile name="default">
-        <logger name="com.github.prontera" level="DEBUG"/>
-    </springProfile>
-    <springProfile name="dev">
-        <logger name="com.github.prontera" level="DEBUG"/>
-    </springProfile>
-    <springProfile name="test">
-        <logger name="com.github.prontera" level="DEBUG"/>
-    </springProfile>
-    <springProfile name="stag">
-        <logger name="com.github.prontera" level="WARN"/>
-    </springProfile>
-    <springProfile name="prod">
-        <logger name="com.github.prontera" level="WARN"/>
-    </springProfile>
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE-ALL">
+        <File>${LOG_FILE_PATH}/all.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_PATH}/all.%d{yyyyMMdd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <append>true</append>
+    </appender>
 
-    <logger name="com.github.prontera.persistence" level="INFO" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <!--<appender-ref ref="FILE"/>-->
-    </logger>
-
-    <logger name="com.github.prontera" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <!--<appender-ref ref="FILE"/>-->
-    </logger>
-
-    <root level="WARN">
-        <!--<appender-ref ref="ASYNC"/>-->
-        <!--<appender-ref ref="FILE"/>-->
-        <appender-ref ref="CONSOLE"/>
+    <!-- root的level不能降低，否则会输出大量spring的debug日志 -->
+    <root level="${level}">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE-ALL"/>
     </root>
+
 </configuration>

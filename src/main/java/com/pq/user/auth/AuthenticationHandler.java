@@ -1,8 +1,8 @@
 package com.pq.user.auth;
 
-import com.ep.user.dto.UserDto;
-import com.ep.user.service.UserService;
-import com.ep.user.utils.ConstantsUser;
+import com.pq.user.dto.UserDto;
+import com.pq.user.service.UserService;
+import com.pq.user.utils.ConstantsUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

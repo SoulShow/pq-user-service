@@ -44,20 +44,25 @@ spring:
     max-open-prepared-statements: 20
 
   application:
-      name: service-hytrix
+      name: service-user
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.github.prontera.entity
+  type-aliases-package: com.pq.user.entity
 
 #sql 日志打印  root（项目）日志打印级别
 logging:
   level:
 #    root: warn
     com:
-      github:
-        prontera:
+      pq:
+        user:
           mapper: debug
+  config:
+    classpath: logback-spring.xml
+
+pq:
+  log-path: /Users/liutao/data/logs/pq-user-service
 
 ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
 xxl:
@@ -80,9 +85,9 @@ xxl:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-service1:8001/eureka/
+      defaultZone: http://eureka-service:8001/eureka/
 server:
-  port: 8081
+  port: 8085
 
 #禁用注册服务
 #eureka:
