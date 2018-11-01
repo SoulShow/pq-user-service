@@ -15,7 +15,6 @@ public class ConstantsUser {
     /**
      *  用户登录后使用SESSION_USER_ID_KEY记录用户id
      **/
-    public static final String SESSION_USER_ID_KEY = "user_id";
 
     /**
      * 日志类型：1、重置密码， 2-修改密码, 3-修改用户信息 4-设置密码

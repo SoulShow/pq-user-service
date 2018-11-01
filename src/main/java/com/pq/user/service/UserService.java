@@ -2,7 +2,6 @@ package com.pq.user.service;
 
 
 import com.pq.user.auth.AuthCookies;
-import com.pq.user.dto.MiniProgramDto;
 import com.pq.user.dto.RegisterRequestDto;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
@@ -129,13 +128,6 @@ public interface UserService {
      * @param user
      */
     void insert(User user);
-
-    /**
-     * 获取小程序信息
-     * @param code
-     * @return
-     */
-    MiniProgramDto getMiniProgramInfoSessionInfo(String code);
 
 
 

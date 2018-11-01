@@ -5,12 +5,14 @@ import com.pq.common.captcha.UserCaptchaType;
 import com.pq.common.constants.CacheKeyConstants;
 import com.pq.common.util.DateUtil;
 import com.pq.common.util.Password;
+import com.pq.common.util.StringUtil;
 import com.pq.common.util.UserIdGenerator;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
 import com.pq.user.entity.UserLogLogin;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
+import com.pq.user.form.AuthForm;
 import com.pq.user.mapper.UserLogLoginMapper;
 import com.pq.user.mapper.UserMapper;
 import com.pq.user.service.LoginService;
@@ -27,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.net.URLDecoder;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +37,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class LoginServiceImpl implements LoginService {
-    public static final String USER_AGENT = "XUser-Agent";
 
     @Autowired
     private Password passwordUtil;
@@ -89,16 +89,16 @@ public class LoginServiceImpl implements LoginService {
         UserDto userDto = userService.transformUserEntityToUserDto(user);
         // 记录session，表示登录状态
         HttpSession session = request.getSession();
-        session.setAttribute(ConstantsUser.SESSION_USER_ID_KEY, user.getUserId());
+//        session.setAttribute(ConstantsUser.SESSION_USER_ID_KEY, user.getUserId());
 
         // 记录用户id与session id的映射
         sessionService.addUserSession(user.getUserId(), session.getId());
         UserLogLogin userLogLogin = new UserLogLogin();
         userLogLogin.setUserId(user.getUserId());
-        userLogLogin.setUserAgent(request.getHeader(USER_AGENT));
+//        userLogLogin.setUserAgent(request.getHeader(USER_AGENT));
         userLogLogin.setSessionId(session.getId());
         userLogLogin.setLoginTime(DateUtil.currentTime());
-        userLogLogin.setLoginIp(getRequestIP(request));
+//        userLogLogin.setLoginIp(getRequestIP(request));
 
         Object deviceId = request.getHeader("XDevice");
         if (deviceId == null) {
@@ -117,31 +117,21 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public UserDto authentication(String username, String passwordPlain, HttpServletRequest request) throws Exception {
-        UserDto userDto = authentication(username, passwordPlain);
-        // 记录session，表示登录状态
-        HttpSession session = request.getSession();
-        session.setAttribute(ConstantsUser.SESSION_USER_ID_KEY, userDto.getUserId());
-
+    public UserDto authentication(AuthForm authForm) throws Exception {
+        UserDto userDto = authentication(authForm.getAccount(), authForm.getPassword());
         // 记录用户id与session id的映射
-        sessionService.addUserSession(userDto.getUserId(), session.getId());
+        sessionService.addUserSession(userDto.getUserId(), authForm.getSessionId());
         UserLogLogin userLogLogin = new UserLogLogin();
         userLogLogin.setUserId(userDto.getUserId());
-        userLogLogin.setUserAgent(request.getHeader(USER_AGENT));
-        userLogLogin.setSessionId(session.getId());
+        userLogLogin.setUserAgent(authForm.getUserAgent());
+        userLogLogin.setSessionId(authForm.getSessionId());
         userLogLogin.setLoginTime(DateUtil.currentTime());
-        userLogLogin.setLoginIp(getRequestIP(request));
-
-        Object deviceId = request.getHeader("XDevice");
-        if (deviceId == null) {
+        userLogLogin.setLoginIp(authForm.getLoginIp());
+        userLogLogin.setDeviceId(authForm.getDeviceId());
+        userLogLogin.setGtClientId(authForm.getGtClientId());
+        userLogLogin.setIsPhone(true);
+        if(StringUtil.isEmpty(authForm.getDeviceId())){
             userLogLogin.setIsPhone(false);
-        } else {
-            userLogLogin.setIsPhone(true);
-            userLogLogin.setDeviceId((String) deviceId);
-        }
-        Object gtClientId = request.getHeader("GTClientId");
-        if (gtClientId != null) {
-            userLogLogin.setGtClientId((String) gtClientId);
         }
         userLogLoginMapper.insert(userLogLogin);
         return userDto;
@@ -169,28 +159,6 @@ public class LoginServiceImpl implements LoginService {
         addPasswordErrorLog(userEntity.getUserId());
         UserException.raise(UserErrors.USER_LOGIN_PASSWORD_ERROR);
         return null;
-    }
-
-    @Override
-    public String authentication(String username, String passwordPlain, String next,
-                                 HttpServletRequest request) throws Exception {
-        authentication(username, passwordPlain, request);
-        // 登录成功后跳转
-        String redirectURL;
-        if (StringUtils.isEmpty(next)) {
-            // 获取域名
-            StringBuffer accessUrl = request.getRequestURL();
-
-            String tempContextUrl = accessUrl
-                    .delete(accessUrl.length() - request.getRequestURI().length(), accessUrl.length())
-                    .append(request.getServletContext().getContextPath()).toString();
-
-            redirectURL = tempContextUrl;
-        } else {
-            redirectURL = URLDecoder.decode(next, "utf-8");
-        }
-
-        return redirectURL;
     }
 
     @Override
@@ -248,28 +216,6 @@ public class LoginServiceImpl implements LoginService {
     }
 
 
-    /**
-     * 获取请求对象的IP
-     *
-     * @param request
-     * @return
-     */
-    private String getRequestIP(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Real-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
 
 
 }

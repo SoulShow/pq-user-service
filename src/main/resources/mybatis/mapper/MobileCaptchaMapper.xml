@@ -54,4 +54,27 @@
     failures, updated_time
     from pq_mobile_captcha
   </select>
+  <select id="selectByMobileAndType" resultMap="BaseResultMap" >
+    select id, mobile, code, type_id, created_time, expired_time, resent_time, used_time,
+    failures, updated_time
+    from pq_mobile_captcha
+    WHERE mobile=#{mobile} AND
+    type_id=(SELECT id FROM ep_captcha_type where type_code=#{type}) AND
+    created_time &gt;=now()-interval 24 hour
+  </select>
+
+  <select id="selectNotUsedByMobileAndType" resultMap="BaseResultMap" >
+    select id, mobile, code, type_id, created_time, expired_time, resent_time, used_time,
+    failures, updated_time
+    from pq_mobile_captcha
+    WHERE mobile=#{mobile}
+    AND type_id=(SELECT id FROM ep_captcha_type where type_code=#{type})
+    AND used_time is null
+    AND created_time &gt;=now()-interval 24 hour
+  </select>
+
+  <update id="incrFailuresById">
+    update pq_mobile_captcha set failures = failures+1
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

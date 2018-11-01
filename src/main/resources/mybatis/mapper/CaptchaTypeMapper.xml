@@ -40,4 +40,9 @@
     select id, type_name, type_code, sms_template_id, updated_time, created_time
     from pq_captcha_type
   </select>
+  <select id="selectByTypeCode" resultMap="BaseResultMap">
+    select id, type_name, type_code, sms_template_id, updated_time, created_time
+    from pq_captcha_type
+    WHERE type_code=#{typeCode}
+  </select>
 </mapper>

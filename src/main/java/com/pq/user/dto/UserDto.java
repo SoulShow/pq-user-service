@@ -10,11 +10,9 @@ public class UserDto implements Serializable {
 
     private String userId;
 
-    private String faceId;
-
     private String username;
 
-    private String name; //
+    private String name;
 
     private String gender;
 
@@ -42,14 +40,6 @@ public class UserDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getFaceId() {
-        return faceId;
-    }
-
-    public void setFaceId(String faceId) {
-        this.faceId = faceId;
     }
 
     public String getUsername() {

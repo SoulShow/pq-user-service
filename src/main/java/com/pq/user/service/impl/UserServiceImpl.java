@@ -1,36 +1,24 @@
 package com.pq.user.service.impl;
 
-import com.google.gson.Gson;
 import com.pq.common.captcha.UserCaptchaType;
 import com.pq.common.constants.CacheKeyConstants;
-import com.pq.common.constants.CommonConstants;
 import com.pq.common.util.*;
 import com.pq.user.auth.AuthCookies;
-import com.pq.user.dto.MiniProgramDto;
 import com.pq.user.dto.RegisterRequestDto;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
 import com.pq.user.entity.UserLogLogin;
 import com.pq.user.entity.UserLogModify;
-import com.pq.user.entity.UserThirdParty;
-import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.mapper.UserLogLoginMapper;
 import com.pq.user.mapper.UserLogModifyMapper;
 import com.pq.user.mapper.UserMapper;
-import com.pq.user.mapper.UserThirdPartyMapper;
 import com.pq.user.service.MobileCaptchaService;
 import com.pq.user.service.UserService;
 import com.pq.user.utils.ConstantsUser;
 import org.apache.commons.codec.digest.Crypt;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -40,11 +28,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.sql.Timestamp;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -73,17 +57,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserLogModifyMapper userLogModifyMapper;
 
-
-    @Autowired
-    private UserThirdPartyMapper thirdPartyMapper;
     @Autowired
     private UserLogLoginMapper userLogLoginMapper;
 
-    @Value("${mini.appid}")
-    private String miniAppId;
-
-    @Value("${mini.secret_key}")
-    private String miniSecretKey;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -194,9 +170,6 @@ public class UserServiceImpl implements UserService {
         userEntity.setRequestFrom(registerRequestDto.getRequestFrom());
         try {
             userMapper.insert(userEntity);
-            if (StringUtils.isNotEmpty(registerRequestDto.getWxCode())) {
-                saveThirdPartUser(registerRequestDto.getWxCode(), userEntity);
-            }
         } catch (Exception e) {
             e.printStackTrace();
             UserException.raise(UserErrors.REGISTER_ERROR);
@@ -204,18 +177,7 @@ public class UserServiceImpl implements UserService {
         return userEntity.getUserId();
     }
 
-    private void saveThirdPartUser(String wxCode, User user) {
-        //获取微信小程序登陆信息
-        MiniProgramDto miniProgramDto = getMiniProgramInfoSessionInfo(wxCode);
-        UserThirdParty userThirdParty = new UserThirdParty();
-        userThirdParty.setUserId(user.getUserId());
-        userThirdParty.setOpenId(miniProgramDto.getOpenid());
-        userThirdParty.setUnionId(miniProgramDto.getUnionid());
-        userThirdParty.setThirdPartType(CommonConstants.THIRD_PART_TYPE_WXCHAT);
-        userThirdParty.setCreatedTime(DateUtil.currentTime());
-        userThirdParty.setUpdatedTime(DateUtil.currentTime());
-        thirdPartyMapper.insert(userThirdParty);
-    }
+
 
     private void checkRegisterInfo(RegisterRequestDto registerRequestDto) {
         if (registerRequestDto.getAgree() == null || !registerRequestDto.getAgree()) {
@@ -264,36 +226,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUserId(String userId) {
         return userMapper.selectByUserId(userId);
-    }
-
-    @Override
-    public MiniProgramDto getMiniProgramInfoSessionInfo(String code) {
-        String url = "https://api.weixin.qq.com/sns/jscode2session?";
-
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = null;
-        httpGet = new HttpGet(url + "appid=" + miniAppId + "&secret=" + miniSecretKey
-                + "&js_code=" + code + "&grant_type=authorization_code");
-        RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(10000)
-                .setSocketTimeout(10000).build();
-        httpGet.setConfig(requestConfig);
-        try {
-            CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-
-            String response = EntityUtils.toString(httpResponse.getEntity(), Charset.forName("utf-8"));
-            Gson gson = new Gson();
-            Map<String, String> resMap = gson.fromJson(response, Map.class);
-            if (resMap.get("errcode") != null) {
-                UserException.raise(new UserErrorCode(String.valueOf(resMap.get("errcode")), resMap.get("errmsg")));
-            }
-            MiniProgramDto miniProgramDto = gson.fromJson(response, MiniProgramDto.class);
-            return miniProgramDto;
-
-        } catch (IOException e) {
-            UserException.raise(UserErrors.PAY_MINI_PROGRAM_NOT_EXIST_ERROR);
-        }
-        return null;
     }
 
 

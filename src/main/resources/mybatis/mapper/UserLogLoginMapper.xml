@@ -50,4 +50,12 @@
     gt_client_id
     from pq_user_log_login
   </select>
+  <select id="selectLastUserLoginLog" resultMap="BaseResultMap" >
+    select id, user_id, user_agent, session_id, login_ip, login_time, is_phone, device_id,
+    gt_client_id
+    from pq_user_log_login
+    WHERE user_id = #{userId}
+    ORDER BY login_time DESC
+    limit 1
+  </select>
 </mapper>
