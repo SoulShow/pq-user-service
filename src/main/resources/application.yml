@@ -9,10 +9,10 @@ spring:
   session:
       store-type: redis
   redis:
-    host: 47.93.114.117
-    port: 6379
-    password: z5yCjRVIw
-    database: 0
+    host: 47.92.82.130
+    port: 9736
+    password:
+    database: 4
   datasource:
     name: dataSource
     type: com.alibaba.druid.pool.DruidDataSource
