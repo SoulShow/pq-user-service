@@ -64,7 +64,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserDto authenticationByCode(String username, String code, HttpServletRequest request, int requestFrom) throws Exception {
-        captchaService.verify(username, UserCaptchaType.LOGIN.getCode(), code);
+//        captchaService.verify(username, UserCaptchaType.LOGIN.getCode(), code);
 
         User user = userMapper.selectByPhone(username);
         if (user != null) {

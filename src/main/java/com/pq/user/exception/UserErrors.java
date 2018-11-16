@@ -10,7 +10,7 @@ import com.pq.common.exception.ErrorCode;
 public class UserErrors extends CommonErrors {
 
     public final static ErrorCode USER_ID_IS_NULL = new UserErrorCode("0001", "用户ID不能为空");
-    public final static ErrorCode USER_NOT_FOUND = new UserErrorCode("0002", "用户不存在");
+    public final static ErrorCode USER_NOT_FOUND = new UserErrorCode("0002", "您的手机号还未注册");
     public final static ErrorCode USER_RESET_PASSWORD_TOKEN_EXPIRE = new UserErrorCode("0003", "token失效或不存在");
     public final static ErrorCode COOKIE_NOT_VALID = new UserErrorCode("0004", "Cookie验证失败");
     public final static ErrorCode AUTH_SECRET_KEY_NOT_FOUND = new UserErrorCode("0005", "授权密钥未设置");
@@ -21,7 +21,7 @@ public class UserErrors extends CommonErrors {
     public final static ErrorCode USER_UPDATE_FAILED = new UserErrorCode("0010", "更新用户失败");
     public final static ErrorCode USER_VERIFY_PASSWORD_ERROR = new UserErrorCode("0011", "用户校验密码错误");
     public final static ErrorCode USER_PHONE_IS_EXITS = new UserErrorCode("0012", "抱歉,该手机号码已经注册过");
-    public final static ErrorCode USER_LOGIN_PASSWORD_ERROR = new UserErrorCode("0013", "手机号或登录密码有误");
+    public final static ErrorCode USER_LOGIN_PASSWORD_ERROR = new UserErrorCode("0013", "您的密码有误，请重新输入");
     public final static ErrorCode USER_UPDATE_PASSWORD_SAME = new UserErrorCode("0014", "新密码不能与原密码一致");
     public final static ErrorCode REGISTER_ERROR_MOBILE = new ErrorCode("0015", "请输入您正确的手机号");
     public final static ErrorCode REGISTER_ERROR = new ErrorCode("0016", "注册失败,请重新确认");
@@ -38,17 +38,9 @@ public class UserErrors extends CommonErrors {
     public final static ErrorCode CAPTCHA_INPUT_ERROR = new UserErrorCode("1004", "手机号或验证码有误");
     public final static ErrorCode CAPTCHA_CANNOT_DELIVERY = new UserErrorCode("1005", "验证码发送失败，请稍后重试");
 
-    public final static ErrorCode USER_NICKNAME_LENGTH_MORE_TEN = new UserErrorCode("1006", "昵称不得超过10个字");
-    public final static ErrorCode USER_NAME_LENGTH_MORE_TEN = new UserErrorCode("1007", "姓名不得超过10个字");
-    public final static ErrorCode USER_MAILID_IS_NOT_NULL = new UserErrorCode("1008", "站内信id不能为空");
-    public final static ErrorCode USER_NOT_REGISTER_LOGIN = new UserErrorCode("1009", "用户未注册");
-    public final static ErrorCode USER_MODIFY_INFO_IS_NULL = new UserErrorCode("1010", "请填写修改信息");
-    public final static ErrorCode USER_PHONE_IS_NOT_REGISTER_ERROR = new UserErrorCode("1011", "手机号有误,请重新输入");
 
-    public final static ErrorCode PAY_MINI_PROGRAM_NOT_EXIST_ERROR = new UserErrorCode("1012", "微信小程序session获取失败");
-
-    public final static ErrorCode USER_INFO_NOT_MATCH_ERROR = new UserErrorCode("1012", "设置密码必须本人操作");
-    public final static ErrorCode USER_PASSWORD_IS_EXIST_ERROR = new UserErrorCode("1013", "用户已有密码,无法设置密码,请去忘记密码操作");
+    public final static ErrorCode USER_INFO_NOT_MATCH_ERROR = new UserErrorCode("1006", "设置密码必须本人操作");
+    public final static ErrorCode USER_PASSWORD_IS_EXIST_ERROR = new UserErrorCode("1007", "用户已有密码,无法设置密码,请去忘记密码操作");
 
 
 

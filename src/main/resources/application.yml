@@ -94,7 +94,7 @@ xxl:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-service:8001/eureka/
+      defaultZone: http://eureka-service:9001/eureka/
 server:
   port: 8085
 

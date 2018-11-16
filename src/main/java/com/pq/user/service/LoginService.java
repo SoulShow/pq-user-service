@@ -35,7 +35,7 @@ public interface LoginService {
      * @return
      * @throws Exception
      */
-    UserDto authentication( AuthForm authForm) throws Exception;
+    UserDto authentication(AuthForm authForm) throws Exception;
 
     /**
      * 登出
