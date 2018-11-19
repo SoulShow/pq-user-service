@@ -98,6 +98,8 @@ eureka:
 server:
   port: 8085
 
+sms:
+  url: http://47.92.82.130/sms/index.php/home/Demo/smsSend
 #禁用注册服务
 #eureka:
 #  client:

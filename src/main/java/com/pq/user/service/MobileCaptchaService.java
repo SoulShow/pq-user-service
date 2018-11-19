@@ -34,5 +34,5 @@ public interface MobileCaptchaService {
      * @param code   验证码
      * @return
      */
-    boolean verify(String mobile, String type, String code);
+    boolean verify(String mobile, int type, String code);
 }

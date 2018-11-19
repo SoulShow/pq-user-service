@@ -1,14 +1,20 @@
 package com.pq.user.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.pq.common.captcha.UserCaptchaType;
 import com.pq.common.exception.ErrorCode;
+import com.pq.common.util.HttpUtil;
 import com.pq.user.dto.CaptchaDto;
 import com.pq.user.entity.CaptchaType;
 import com.pq.user.entity.MobileCaptcha;
+import com.pq.user.entity.User;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.mapper.CaptchaTypeMapper;
 import com.pq.user.mapper.MobileCaptchaMapper;
+import com.pq.user.mapper.UserMapper;
 import com.pq.user.service.MobileCaptchaService;
+import com.pq.user.utils.ConstantsUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +56,30 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
 
     @Autowired
     private CaptchaTypeMapper captchaTypeMapper;
+    @Autowired
+    private UserMapper userMapper;
 
-//    @Autowired
-//    private SmsService smsService;
+    @Value("${sms.url}")
+    private String smsUrl;
 
 
     @Override
     public boolean canSend(String mobile, String type) {
+
+        User user = userMapper.selectByPhone(mobile);
+        if (user != null && user.getStatus() == ConstantsUser.USER_STATUS_LOCKED) {
+            UserException.raise(UserErrors.USER_IS_LOCKED);
+        }
+        if (type == UserCaptchaType.REGISTER.getCode()) {
+            if (user != null) {
+                UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
+            }
+        } else if (type != UserCaptchaType.LOGIN.getCode()) {
+            //验证是都注册
+            if (user == null) {
+                UserException.raise(UserErrors.USER_NOT_FOUND);
+            }
+        }
         List<MobileCaptcha> mobileCaptchaList = mobileCaptchaMapper.selectByMobileAndType(mobile, type);
 
         // 判断是否超过每天最大发送次数
@@ -110,10 +133,10 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
                 LOGGER.info("send code:{}", mobileCaptcha.getCode());
                 if (!isBlockSendSMS) {
                     HashMap<String, String> paramMap = new HashMap<>();
-                    paramMap.put("captcha", mobileCaptcha.getCode());
+                    paramMap.put("code", mobileCaptcha.getCode());
                     paramMap.put("mobile", mobileCaptcha.getMobile());
                     paramMap.put("templateId", captchaType.getSmsTemplateId().toString());
-//                    smsService.send(paramMap);
+                    HttpUtil.sendJson(smsUrl,JSON.toJSONString(paramMap),new HashMap<>());
                 }
             } catch (RuntimeException r) {
                 UserException.raise(new ErrorCode("99999", r.getMessage()));
@@ -127,7 +150,7 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
     }
 
     @Override
-    public boolean verify(String mobile, String type, String code) {
+    public boolean verify(String mobile, int type, String code) {
         long currTime = System.currentTimeMillis();
         boolean isValid = false;
         List<MobileCaptcha> mobileCaptchaList = mobileCaptchaMapper.selectNotUsedByMobileAndType(mobile, type);

@@ -18,7 +18,7 @@ public interface MobileCaptchaMapper {
 
     List<MobileCaptcha> selectByMobileAndType(@Param("mobile") String mobile, @Param("type") String type);
 
-    List<MobileCaptcha> selectNotUsedByMobileAndType(@Param("mobile") String mobile, @Param("type") String type);
+    List<MobileCaptcha> selectNotUsedByMobileAndType(@Param("mobile") String mobile, @Param("type") int type);
 
     int incrFailuresById(@Param("id") Long id);
 }
