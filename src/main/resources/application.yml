@@ -12,7 +12,7 @@ spring:
     host: 47.92.82.130
     port: 9736
     password:
-    database: 4
+    database: 0
   datasource:
     name: dataSource
     type: com.alibaba.druid.pool.DruidDataSource

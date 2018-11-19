@@ -1,46 +1,22 @@
 package com.pq.user.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author liutao
  */
 public class UserDto implements Serializable {
-    private Long id;
-
-    private String userId;
 
     private String username;
-
-    private String name;
-
-    private String gender;
-
+    private String huanXinId;
+    private String picture;
     private String phone;
-
-    private String nickname;
-
-    private Integer constellation;
-
-    private String birthday;
-
-    private String avatar;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    private int role;
+    private String address;
+    private String userId;
+    private List<AgencyUserDto> studentList = new ArrayList<>();
 
     public String getUsername() {
         return username;
@@ -50,20 +26,20 @@ public class UserDto implements Serializable {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getHuanXinId() {
+        return huanXinId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setHuanXinId(String huanXinId) {
+        this.huanXinId = huanXinId;
     }
 
-    public String getGender() {
-        return gender;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public String getPhone() {
@@ -74,35 +50,35 @@ public class UserDto implements Serializable {
         this.phone = phone;
     }
 
-    public String getNickname() {
-        return nickname;
+    public int getRole() {
+        return role;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setRole(int role) {
+        this.role = role;
     }
 
-    public Integer getConstellation() {
-        return constellation;
+    public String getAddress() {
+        return address;
     }
 
-    public void setConstellation(Integer constellation) {
-        this.constellation = constellation;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getBirthday() {
-        return birthday;
+    public List<AgencyUserDto> getStudentList() {
+        return studentList;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+    public void setStudentList(List<AgencyUserDto> studentList) {
+        this.studentList = studentList;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

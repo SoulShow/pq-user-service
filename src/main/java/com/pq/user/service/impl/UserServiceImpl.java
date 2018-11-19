@@ -1,22 +1,27 @@
 package com.pq.user.service.impl;
 
-import com.pq.common.captcha.UserCaptchaType;
 import com.pq.common.constants.CacheKeyConstants;
+import com.pq.common.constants.ParentRelationTypeEnum;
+import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.*;
 import com.pq.user.auth.AuthCookies;
+import com.pq.user.dto.AgencyUserDto;
 import com.pq.user.dto.RegisterRequestDto;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
 import com.pq.user.entity.UserLogLogin;
 import com.pq.user.entity.UserLogModify;
+import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
+import com.pq.user.feign.AgencyFeign;
 import com.pq.user.mapper.UserLogLoginMapper;
 import com.pq.user.mapper.UserLogModifyMapper;
 import com.pq.user.mapper.UserMapper;
 import com.pq.user.service.MobileCaptchaService;
 import com.pq.user.service.UserService;
 import com.pq.user.utils.ConstantsUser;
+import com.pq.user.utils.UserResult;
 import org.apache.commons.codec.digest.Crypt;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,6 +34,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -52,37 +59,25 @@ public class UserServiceImpl implements UserService {
     private RedisTemplate redisTemplate;
 
     @Autowired
-    private MobileCaptchaService mobileCaptchaService;
-
-    @Autowired
     private UserLogModifyMapper userLogModifyMapper;
 
     @Autowired
     private UserLogLoginMapper userLogLoginMapper;
+
+    @Autowired
+    private AgencyFeign agencyFeign;
 
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public UserDto getUserDtoByUserId(String userId) {
-        String userDtoCacheKey = CacheKeyConstants.USER_DTO_PREFIX + userId;
-        Long userDtoCacheExpire = CacheKeyConstants.USER_DTO_EXPIRE;
 
-        UserDto userDto;
-
-        if (redisTemplate.hasKey(userDtoCacheKey)) {
-            userDto = (UserDto) redisTemplate.opsForValue().get(userDtoCacheKey);
-        } else {
-            User userEntity = userMapper.selectByUserId(userId);
-            if (userEntity == null) {
-                UserException.raise(UserErrors.USER_NOT_FOUND);
-            }
-            userDto = transformUserEntityToUserDto(userEntity);
-
-            redisTemplate.opsForValue().set(userDtoCacheKey, userDto, userDtoCacheExpire, TimeUnit.SECONDS);
+        User userEntity = userMapper.selectByUserId(userId);
+        if (userEntity == null) {
+            UserException.raise(UserErrors.USER_NOT_FOUND);
         }
-
-        return userDto;
+       return transformUserEntityToUserDto(userEntity);
     }
 
     @Override
@@ -101,16 +96,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto transformUserEntityToUserDto(User user) {
+        UserResult<List<AgencyUserDto>> result = agencyFeign.getAgencyUserStudent(user.getUserId());
+        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+            throw new UserException(new UserErrorCode(result.getStatus(),result.getMessage()));
+        }
+        List<AgencyUserDto> list = result.getData();
         UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setUserId(user.getUserId());
         userDto.setUsername(user.getUsername());
-        userDto.setGender(user.getGender());
         userDto.setPhone(user.getPhone());
-        userDto.setName(user.getName());
-        userDto.setNickname(user.getNickname());
-        userDto.setAvatar(user.getAvatar());
-        userDto.setBirthday(user.getBirthday());
+        userDto.setHuanXinId(null);
+        userDto.setPicture(user.getAvatar());
+        userDto.setRole(user.getRole());
+        userDto.setAddress(user.getAddress());
+        userDto.setUserId(user.getUserId());
+        userDto.setStudentList(list);
         return userDto;
     }
 
@@ -142,7 +141,6 @@ public class UserServiceImpl implements UserService {
 
     private String getCryptHash(String str) {
         String sryptHash = Crypt.crypt(str, authSecretKey);
-
         sryptHash = sryptHash.substring(sryptHash.lastIndexOf("$") + 1);
         return sryptHash;
     }
@@ -177,8 +175,6 @@ public class UserServiceImpl implements UserService {
         return userEntity.getUserId();
     }
 
-
-
     private void checkRegisterInfo(RegisterRequestDto registerRequestDto) {
         if (registerRequestDto.getAgree() == null || !registerRequestDto.getAgree()) {
             UserException.raise(UserErrors.REGISTER_AGREE_USER_AGREEMENT_ERROR);
@@ -190,8 +186,6 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
         }
-        mobileCaptchaService.verify(registerRequestDto.getPhone(), UserCaptchaType.REGISTER.getCode(),
-                registerRequestDto.getVerifyCode());
     }
 
     @Override

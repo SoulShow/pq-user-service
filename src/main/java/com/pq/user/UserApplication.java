@@ -16,9 +16,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan
 @MapperScan("com.pq.user.mapper")
-@EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
+@EnableFeignClients(basePackages = {"com.pq.user.feign"})
 public class UserApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

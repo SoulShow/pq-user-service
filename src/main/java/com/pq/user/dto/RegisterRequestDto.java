@@ -6,10 +6,10 @@ package com.pq.user.dto;
  */
 public class RegisterRequestDto {
     private String phone;
-    private String verifyCode;
     private String password;
+    private int role;
+    private int relation;
     private Boolean agree;
-    private String wxCode;
     private int requestFrom;
 
     public String getPhone() {
@@ -18,14 +18,6 @@ public class RegisterRequestDto {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getVerifyCode() {
-        return verifyCode;
-    }
-
-    public void setVerifyCode(String verifyCode) {
-        this.verifyCode = verifyCode;
     }
 
     public String getPassword() {
@@ -44,19 +36,27 @@ public class RegisterRequestDto {
         this.agree = agree;
     }
 
-    public String getWxCode() {
-        return wxCode;
-    }
-
-    public void setWxCode(String wxCode) {
-        this.wxCode = wxCode;
-    }
-
     public int getRequestFrom() {
         return requestFrom;
     }
 
     public void setRequestFrom(int requestFrom) {
         this.requestFrom = requestFrom;
+    }
+
+    public int getRelation() {
+        return relation;
+    }
+
+    public void setRelation(int relation) {
+        this.relation = relation;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }
