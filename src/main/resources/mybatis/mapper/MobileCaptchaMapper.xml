@@ -59,7 +59,7 @@
     failures, updated_time
     from pq_mobile_captcha
     WHERE mobile=#{mobile} AND
-    type_id=(SELECT id FROM pq_mobile_captcha where type_id=#{type}) AND
+    type_id=(SELECT id FROM pq_captcha_type where type_id=#{type}) AND
     created_time &gt;=now()-interval 24 hour
   </select>
 
@@ -68,7 +68,7 @@
     failures, updated_time
     from pq_mobile_captcha
     WHERE mobile=#{mobile}
-    AND type_id=(SELECT id FROM pq_mobile_captcha where type_id=#{type})
+    AND type_id=(SELECT id FROM pq_captcha_type where type_id=#{type})
     AND used_time is null
     AND created_time &gt;=now()-interval 24 hour
   </select>
