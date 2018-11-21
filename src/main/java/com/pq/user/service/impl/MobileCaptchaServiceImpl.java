@@ -74,7 +74,7 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
             if (user != null) {
                 UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
             }
-        } else if (type != UserCaptchaType.LOGIN.getCode()||type != UserCaptchaType.UPDATE_PHONE.getCode()) {
+        } else if (UserCaptchaType.LOGIN.getCode().equals(type)) {
             //验证是都注册
             if (user == null) {
                 UserException.raise(UserErrors.USER_NOT_FOUND);
