@@ -1,9 +1,8 @@
 package com.pq.user.controller;
 
 import com.pq.common.exception.CommonErrors;
-import com.pq.user.dto.CaptchaDto;
-import com.pq.user.dto.RegisterRequestDto;
-import com.pq.user.dto.UserDto;
+import com.pq.user.dto.*;
+import com.pq.user.entity.User;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.form.AuthForm;
@@ -73,6 +72,45 @@ public class UserController {
         UserResult result = new UserResult();
         try {
             mobileCaptchaService.verify(mobile,type,code);
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+    @PostMapping("/update/phone")
+    @ResponseBody
+    public UserResult updateUserPhone(@RequestBody UpdatePhoneDto updatePhoneDto) {
+        UserResult result = new UserResult();
+        try {
+            User user = userService.getUserByPhone(updatePhoneDto.getAccount());
+            user.setPhone(updatePhoneDto.getNewPhone());
+            userService.updateUserInfo(user);
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+    @PostMapping("/update/password")
+    @ResponseBody
+    public UserResult updateUserPassword(@RequestBody PasswordModifyDto passwordModifyDto) {
+        UserResult result = new UserResult();
+        try {
+            User user = userService.getUserByUserId(passwordModifyDto.getUserId());
+
+            userService.setPassword(user.getUserId(),user.getPhone(),
+                    passwordModifyDto.getOldPassword(),passwordModifyDto.getRepPassword());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());
