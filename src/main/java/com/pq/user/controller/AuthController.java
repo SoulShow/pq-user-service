@@ -7,6 +7,7 @@ import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.form.AuthForm;
 import com.pq.user.form.ForgetPasswordForm;
+import com.pq.user.form.LogoutForm;
 import com.pq.user.service.LoginService;
 import com.pq.user.service.ResetService;
 import com.pq.user.service.UserService;
@@ -37,6 +38,23 @@ public class AuthController  {
         try {
             UserDto userDto = loginService.authentication(authForm);
             result.setData(userDto);
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+    @PostMapping("/logout")
+    @ResponseBody
+    public UserResult login(@RequestBody LogoutForm logoutForm) {
+        UserResult result = new UserResult();
+        try {
+            loginService.logout(logoutForm.getUserId(),logoutForm.getSessionId());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());
