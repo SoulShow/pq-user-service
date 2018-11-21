@@ -28,6 +28,9 @@ public class PasswordModifyDto implements Serializable {
     private String newPassword;
 
     private String repPassword;
+
+    private String sessionId;
+
     @NotBlank(message = "请输入原登录密码")
     @NotNull(message = "请输入原登录密码")
     @Size(min = 6, max = 12, message = "密码由6-12位英文字母、数字或符号组成。")
@@ -89,5 +92,13 @@ public class PasswordModifyDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

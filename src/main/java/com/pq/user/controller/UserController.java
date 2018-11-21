@@ -7,10 +7,7 @@ import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.form.AuthForm;
 import com.pq.user.form.ForgetPasswordForm;
-import com.pq.user.service.LoginService;
-import com.pq.user.service.MobileCaptchaService;
-import com.pq.user.service.ResetService;
-import com.pq.user.service.UserService;
+import com.pq.user.service.*;
 import com.pq.user.utils.UserResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private MobileCaptchaService mobileCaptchaService;
+    @Autowired
+    private SessionService sessionService;
 
     @GetMapping("")
     @ResponseBody
@@ -91,6 +90,7 @@ public class UserController {
             User user = userService.getUserByPhone(updatePhoneDto.getAccount());
             user.setPhone(updatePhoneDto.getNewPhone());
             userService.updateUserInfo(user);
+            sessionService.deleteUserSession(user.getUserId(),updatePhoneDto.getSessionId());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());
@@ -111,6 +111,7 @@ public class UserController {
 
             userService.setPassword(user.getUserId(),user.getPhone(),
                     passwordModifyDto.getOldPassword(),passwordModifyDto.getRepPassword());
+            sessionService.deleteUserSession(passwordModifyDto.getUserId(),passwordModifyDto.getSessionId());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

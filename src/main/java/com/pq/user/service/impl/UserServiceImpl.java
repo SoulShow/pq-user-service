@@ -19,6 +19,7 @@ import com.pq.user.mapper.UserLogLoginMapper;
 import com.pq.user.mapper.UserLogModifyMapper;
 import com.pq.user.mapper.UserMapper;
 import com.pq.user.service.MobileCaptchaService;
+import com.pq.user.service.SessionService;
 import com.pq.user.service.UserService;
 import com.pq.user.utils.ConstantsUser;
 import com.pq.user.utils.UserResult;
@@ -66,7 +67,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AgencyFeign agencyFeign;
-
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -229,7 +229,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setPassword(String userId, String phone, String password, String repPassword) {
+    public void setPassword(String userId, String phone, String oldPassword, String repPassword) {
         User userEntity = userMapper.selectByPhone(phone);
 
         if (userEntity == null) {
@@ -238,13 +238,11 @@ public class UserServiceImpl implements UserService {
         if (!userEntity.getUserId().equals(userId)) {
             UserException.raise(UserErrors.USER_INFO_NOT_MATCH_ERROR);
         }
-        if (!StringUtils.isEmpty(userEntity.getPassword())) {
-            UserException.raise(UserErrors.USER_PASSWORD_IS_EXIST_ERROR);
-        }
+
         User originUserEntity = new User();
         BeanUtils.copyProperties(userEntity, originUserEntity);
 
-        userEntity.setPassword(encodePassword(password));
+        userEntity.setPassword(encodePassword(repPassword));
         userEntity.setUpdatedTime(DateUtil.currentTime());
 
         updateUser(userEntity, originUserEntity, ConstantsUser.USER_MODIFY_TYPE_SET_PASSWORD);
