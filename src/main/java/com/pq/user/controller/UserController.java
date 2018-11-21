@@ -89,6 +89,7 @@ public class UserController {
         try {
             User user = userService.getUserByPhone(updatePhoneDto.getAccount());
             user.setPhone(updatePhoneDto.getNewPhone());
+            user.setUsername(updatePhoneDto.getNewPhone());
             userService.updateUserInfo(user);
             sessionService.deleteUserSession(user.getUserId(),updatePhoneDto.getSessionId());
         } catch (UserException e){
