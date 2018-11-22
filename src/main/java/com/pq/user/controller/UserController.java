@@ -27,6 +27,8 @@ public class UserController {
     private MobileCaptchaService mobileCaptchaService;
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private QiniuService qiniuService;
 
     @GetMapping("")
     @ResponseBody
@@ -113,6 +115,44 @@ public class UserController {
             userService.setPassword(user.getUserId(),user.getPhone(),
                     passwordModifyDto.getOldPassword(),passwordModifyDto.getRepPassword());
             sessionService.deleteUserSession(passwordModifyDto.getUserId(),passwordModifyDto.getSessionId());
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+    @PostMapping("/update/avatar")
+    @ResponseBody
+    public UserResult updateUserAvatar(@RequestBody UserModifyDto userModifyDto) {
+        UserResult result = new UserResult();
+        try {
+            User user = userService.getUserByUserId(userModifyDto.getUserId());
+            String avatar = qiniuService.uploadFile(userModifyDto.getAvatar().getBytes(),"user");
+            user.setAvatar(avatar);
+            userService.updateUserInfo(user);
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+    @PostMapping("/update/address")
+    @ResponseBody
+    public UserResult updateUserAddress(@RequestBody UserModifyDto userModifyDto) {
+        UserResult result = new UserResult();
+        try {
+            User user = userService.getUserByUserId(userModifyDto.getUserId());
+            user.setAddress(userModifyDto.getAddress());
+            userService.updateUserInfo(user);
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

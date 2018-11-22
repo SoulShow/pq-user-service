@@ -105,4 +105,13 @@ sms:
 #  client:
 #    register-with-eureka: false
 #    fetch-registry: false
-
+qiniu:
+  ak: -xU0TAmYBS4hnLk7m3RNyScRUi_RzFX1WKBcVeKN
+  sk: zPwXTWc45904K1tTFDciEECEjdHb3ODGnaZvwfWg
+  user:
+    avatar:
+      bucket:
+        develop-test
+  download:
+    domain: http://odoj87y2q.bkt.clouddn.com/
+    key: user/img/
