@@ -6,7 +6,7 @@
 
     <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
     <!--local 作用域在配置文件内有效，context 作用域的有效范围延伸至 logger context，system 作用域的范围最广，整个 JVM 内都有效。-->
-    <property name="level" scope="context" value="debug"/>
+    <property name="level" scope="context" value="info"/>
 
     <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
         <encoder>
