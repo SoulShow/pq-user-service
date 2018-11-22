@@ -27,8 +27,6 @@ public class UserController {
     private MobileCaptchaService mobileCaptchaService;
     @Autowired
     private SessionService sessionService;
-    @Autowired
-    private QiniuService qiniuService;
 
     @GetMapping("")
     @ResponseBody
@@ -131,8 +129,7 @@ public class UserController {
         UserResult result = new UserResult();
         try {
             User user = userService.getUserByUserId(userModifyDto.getUserId());
-            String avatar = qiniuService.uploadFile(userModifyDto.getAvatar().getBytes(),"user");
-            user.setAvatar(avatar);
+            user.setAvatar(userModifyDto.getAvatar());
             userService.updateUserInfo(user);
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());

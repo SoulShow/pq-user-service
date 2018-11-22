@@ -1,7 +1,5 @@
 package com.pq.user.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.Serializable;
 
 /**
@@ -10,16 +8,10 @@ import java.io.Serializable;
 public class UserModifyDto implements Serializable {
 
     private static final long serialVersionUID = -5792330316761686751L;
-    private MultipartFile avatar;
+    private String avatar;
     private String address;
     private String userId;
-    public MultipartFile getAvatar() {
-        return avatar;
-    }
 
-    public void setAvatar(MultipartFile avatar) {
-        this.avatar = avatar;
-    }
 
     public String getAddress() {
         return address;
@@ -35,5 +27,13 @@ public class UserModifyDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
