@@ -16,6 +16,12 @@ public class AgencyUserDto {
 
     private String name;
 
+    private int sex;
+
+    private String agencyName;
+
+    private String className;
+
     public Long getAgencyClassId() {
         return agencyClassId;
     }
@@ -71,5 +77,29 @@ public class AgencyUserDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public String getAgencyName() {
+        return agencyName;
+    }
+
+    public void setAgencyName(String agencyName) {
+        this.agencyName = agencyName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }
