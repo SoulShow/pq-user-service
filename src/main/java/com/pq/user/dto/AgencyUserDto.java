@@ -22,6 +22,8 @@ public class AgencyUserDto {
 
     private String className;
 
+    private String avatar;
+
     public Long getAgencyClassId() {
         return agencyClassId;
     }
@@ -101,5 +103,13 @@ public class AgencyUserDto {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
