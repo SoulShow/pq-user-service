@@ -16,6 +16,6 @@ public interface UserDynamicImgMapper {
 
     int updateByPrimaryKey(UserDynamicImg record);
 
-    List<String> selectByDynamicId(@Param("dynamicId")Long dynamicId);
+    List<UserDynamicImg>  selectByDynamicId(@Param("dynamicId")Long dynamicId);
 
 }

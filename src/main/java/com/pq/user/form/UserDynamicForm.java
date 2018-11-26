@@ -13,6 +13,8 @@ public class UserDynamicForm {
 
     private List<String> imgList;
 
+    private String movieUrl;
+
     public String getUserId() {
         return userId;
     }
@@ -51,5 +53,13 @@ public class UserDynamicForm {
 
     public void setAgencyClassId(Long agencyClassId) {
         this.agencyClassId = agencyClassId;
+    }
+
+    public String getMovieUrl() {
+        return movieUrl;
+    }
+
+    public void setMovieUrl(String movieUrl) {
+        this.movieUrl = movieUrl;
     }
 }

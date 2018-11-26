@@ -76,5 +76,16 @@
       praise_count = praise_count - 1,
       updated_time = now()
     where id = #{id,jdbcType=BIGINT}
+    and praise_count > 0
   </update>
+
+  <select id="selectUserClassDynamicByClassId" resultMap="BaseResultMap" >
+    select id, user_id, name, content, praise_count, comment_count, state, created_time,
+    updated_time, agency_class_id
+    from pq_user_dynamic
+    where  agency_class_id = #{agencyClassId}
+    and state = 1
+    order by created_time desc
+    limit #{offset},#{size}
+  </select>
 </mapper>

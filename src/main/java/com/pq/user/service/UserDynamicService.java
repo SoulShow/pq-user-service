@@ -17,12 +17,13 @@ public interface UserDynamicService {
 
     /**
      * 获取动态列表
+     * @param agencyClassId
      * @param userId
      * @param offset
      * @param size
      * @return
      */
-    List<UserDynamicDto> getUserDynamicList(String userId,int offset,int size);
+    List<UserDynamicDto> getUserDynamicList(Long agencyClassId,String userId, int offset,int size);
 
 
     /**

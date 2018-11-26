@@ -30,7 +30,8 @@ public class UserDynamicController {
 
     @GetMapping("")
     @ResponseBody
-    public UserResult<List<UserDynamicDto>> getUserDynamic(@RequestParam(value = "userId")String userId,
+    public UserResult<List<UserDynamicDto>> getUserDynamic(@RequestParam(value = "agencyClassId")Long agencyClassId,
+                                                           @RequestParam(value = "userId")String userId,
                                                            @RequestParam("page")Integer page,
                                                            @RequestParam("size")Integer size) {
         if (page == null || page < 1) {
@@ -43,7 +44,7 @@ public class UserDynamicController {
 
         UserResult result = new UserResult();
         try {
-            result.setData(dynamicService.getUserDynamicList(userId,offset,size));
+            result.setData(dynamicService.getUserDynamicList(agencyClassId,userId,offset,size));
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

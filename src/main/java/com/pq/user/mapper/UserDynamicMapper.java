@@ -17,7 +17,10 @@ public interface UserDynamicMapper {
     int updateByPrimaryKey(UserDynamic record);
 
     List<UserDynamic> selectUserClassDynamic(@Param("classIdList")List<Long> classIdList,
-                                             @Param("offset")int offset, @Param("page") int page);
+                                             @Param("offset")int offset, @Param("size") int size);
+
+    List<UserDynamic> selectUserClassDynamicByClassId(@Param("agencyClassId")Long agencyClassId,
+                                             @Param("offset")int offset, @Param("size") int size);
 
     void addPraiseCountById(@Param("id") Long id);
 

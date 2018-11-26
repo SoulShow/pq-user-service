@@ -9,6 +9,8 @@ public class UserDynamicImg {
 
     private String img;
 
+    private int type;
+
     private Integer state;
 
     private Timestamp createdTime;
@@ -61,5 +63,13 @@ public class UserDynamicImg {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

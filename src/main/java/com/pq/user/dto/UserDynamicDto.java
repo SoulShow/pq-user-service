@@ -17,6 +17,10 @@ public class UserDynamicDto {
 
     private String createdTime;
 
+    private int praiseState;
+
+    private String movieUrl;
+
     private List<String> imgList;
 
     private List<DynamicPraiseDto> praiseList;
@@ -101,5 +105,21 @@ public class UserDynamicDto {
 
     public void setImgList(List<String> imgList) {
         this.imgList = imgList;
+    }
+
+    public String getMovieUrl() {
+        return movieUrl;
+    }
+
+    public void setMovieUrl(String movieUrl) {
+        this.movieUrl = movieUrl;
+    }
+
+    public int getPraiseState() {
+        return praiseState;
+    }
+
+    public void setPraiseState(int praiseState) {
+        this.praiseState = praiseState;
     }
 }

@@ -1,5 +1,6 @@
 package com.pq.user.service.impl;
 
+import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
 import com.pq.user.dto.DynamicCommentDto;
@@ -21,6 +22,7 @@ import com.pq.user.mapper.UserDynamicImgMapper;
 import com.pq.user.mapper.UserDynamicMapper;
 import com.pq.user.mapper.UserDynamicPraiseMapper;
 import com.pq.user.service.UserDynamicService;
+import com.pq.user.utils.ConstantsUser;
 import com.pq.user.utils.UserResult;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,23 +42,15 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     @Autowired
     private UserDynamicImgMapper userDynamicImgMapper;
     @Autowired
-    private AgencyFeign agencyFeign;
-    @Autowired
     private UserDynamicPraiseMapper userDynamicPraiseMapper;
     @Autowired
     private UserDynamicCommentMapper userDynamicCommentMapper;
 
     @Override
-    public List<UserDynamicDto> getUserDynamicList(String userId, int offset, int size){
+    public List<UserDynamicDto> getUserDynamicList(Long agencyClassId,String userId, int offset, int size){
 
-        UserResult<List<Long>> classIdResult = agencyFeign.getAgencyUserClassId(userId);
-
-        if(!CommonErrors.SUCCESS.getErrorCode().equals(classIdResult.getStatus())){
-            throw new UserException(new UserErrorCode(classIdResult.getStatus(),classIdResult.getMessage()));
-        }
-        List<Long> classIdList = classIdResult.getData();
         List<UserDynamicDto> dynamicDtoList = new ArrayList<>();
-        List<UserDynamic> userDynamicList = userDynamicMapper.selectUserClassDynamic(classIdList,offset,size);
+        List<UserDynamic> userDynamicList = userDynamicMapper.selectUserClassDynamicByClassId(agencyClassId,offset,size);
         for(UserDynamic userDynamic : userDynamicList){
 
             UserDynamicDto userDynamicDto = new UserDynamicDto();
@@ -68,12 +62,23 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             userDynamicDto.setCommentCount(userDynamic.getCommentCount());
             userDynamicDto.setCreatedTime(DateUtil.formatDate(userDynamic.getCreatedTime(),DateUtil.DEFAULT_DATETIME_FORMAT));
 
-            List<String> imgList = userDynamicImgMapper.selectByDynamicId(userDynamic.getId());
-            userDynamicDto.setImgList(imgList);
+            List<UserDynamicImg> imgList = userDynamicImgMapper.selectByDynamicId(userDynamic.getId());
+            List<String> imgs = new ArrayList<>();
+            for(UserDynamicImg userDynamicImg : imgList){
+                if(userDynamicImg.getType()==ConstantsUser.USER_DYNAMIC_IMG_TYPE_IMG){
+                    imgs.add(userDynamicImg.getImg());
+                }else {
+                    userDynamicDto.setMovieUrl(userDynamicImg.getImg());
+                }
+            }
+            userDynamicDto.setImgList(imgs);
 
             List<UserDynamicPraise> praiseList = userDynamicPraiseMapper.selectByDynamicId(userDynamic.getId());
             List<DynamicPraiseDto> dynamicPraiseDtoList = new ArrayList<>();
             for(UserDynamicPraise userDynamicPraise:praiseList){
+                if(userId.equals(userDynamicPraise.getUserId())){
+                    userDynamicDto.setPraiseState(1);
+                }
                 DynamicPraiseDto dynamicPraiseDto = new DynamicPraiseDto();
                 dynamicPraiseDto.setId(userDynamicPraise.getId());
                 dynamicPraiseDto.setName(userDynamicPraise.getName());
@@ -111,7 +116,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamic.setContent(userDynamicForm.getContent());
         userDynamic.setPraiseCount(0);
         userDynamic.setCommentCount(0);
-        userDynamic.setState(1);
+        userDynamic.setState(CommonConstants.PQ_STATE_VALID);
         userDynamic.setCreatedTime(DateUtil.currentTime());
         userDynamic.setUpdatedTime(DateUtil.currentTime());
         userDynamicMapper.insert(userDynamic);
@@ -120,7 +125,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             UserDynamicImg userDynamicImg = new UserDynamicImg();
             userDynamicImg.setDynamicId(userDynamic.getId());
             userDynamicImg.setImg(img);
-            userDynamicImg.setState(1);
+            userDynamicImg.setState(CommonConstants.PQ_STATE_VALID);
             userDynamicImg.setCreatedTime(DateUtil.currentTime());
             userDynamicImg.setUpdatedTime(DateUtil.currentTime());
             userDynamicImgMapper.insert(userDynamicImg);
@@ -133,7 +138,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         dynamicPraise.setDynamicId(praiseDynamicForm.getDynamicId());
         dynamicPraise.setUserId(praiseDynamicForm.getUserId());
         dynamicPraise.setName(praiseDynamicForm.getName());
-        dynamicPraise.setState(1);
+        dynamicPraise.setState(CommonConstants.PQ_STATE_VALID);
         dynamicPraise.setUpdatedTime(DateUtil.currentTime());
         dynamicPraise.setCreatedTime(DateUtil.currentTime());
         userDynamicPraiseMapper.insert(dynamicPraise);
@@ -145,7 +150,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     @Transactional(rollbackFor = Exception.class)
     public void cancelPraiseDynamic(CancelPraiseDynamicForm cancelPraiseDynamicForm){
         UserDynamicPraise dynamicPraise = userDynamicPraiseMapper.selectByPrimaryKey(cancelPraiseDynamicForm.getPraiseId());
-        dynamicPraise.setState(0);
+        dynamicPraise.setState(CommonConstants.PQ_STATE_UN_VALID);
         dynamicPraise.setUpdatedTime(DateUtil.currentTime());
         userDynamicPraiseMapper.updateByPrimaryKey(dynamicPraise);
 
@@ -156,7 +161,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     public Long createDynamicComment(UserDynamicCommentForm dynamicCommentForm){
         UserDynamicComment userDynamicComment = new UserDynamicComment();
         BeanUtils.copyProperties(dynamicCommentForm,userDynamicComment);
-        userDynamicComment.setState(1);
+        userDynamicComment.setState(CommonConstants.PQ_STATE_VALID);
         userDynamicComment.setCreatedTime(DateUtil.currentTime());
         userDynamicComment.setUpdatedTime(DateUtil.currentTime());
         userDynamicCommentMapper.insert(userDynamicComment);
