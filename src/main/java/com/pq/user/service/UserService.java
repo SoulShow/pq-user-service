@@ -6,10 +6,12 @@ import com.pq.user.dto.RegisterRequestDto;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
 import com.pq.user.entity.UserLogLogin;
+import com.pq.user.form.FeedbackForm;
 
 import java.util.List;
 
 /**
+ * 用户服务
  * @author liutao
  */
 public interface UserService {
@@ -131,6 +133,13 @@ public interface UserService {
      */
     void insert(User user);
 
+    /**
+     * 用户反馈
+     *
+     * @param userId
+     * @param content
+     */
+    void feedback(String userId ,String content);
 
 
 }

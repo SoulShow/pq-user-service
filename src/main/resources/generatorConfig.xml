@@ -38,39 +38,54 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="pq_user_third_party" domainObjectName="UserThirdParty">
+        <table tableName="pq_user_dynamic" domainObjectName="UserDynamic">
              <generatedKey column="id" sqlStatement="MySql" identity="true"/>
              <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
              <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
          </table>
 
-        <table tableName="pq_captcha_type" domainObjectName="CaptchaType">
-        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
-        <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
-        </table>
-
-        <table tableName="pq_mobile_captcha" domainObjectName="MobileCaptcha">
-        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
-        <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
-        </table>
-
-        <table tableName="pq_user" domainObjectName="User">
+        <table tableName="pq_user_dynamic_comment" domainObjectName="UserDynamicComment">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <columnOverride column="lock_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
-            <columnOverride column="register_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
             <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
             <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
         </table>
-
-        <table tableName="pq_user_log_login" domainObjectName="UserLogLogin">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <columnOverride column="login_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
-        </table>
-        <table tableName="pq_user_log_modify" domainObjectName="UserLogModify">
+        <table tableName="pq_user_dynamic_img" domainObjectName="UserDynamicImg">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+            <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
         </table>
+        <table tableName="pq_user_dynamic_praise" domainObjectName="UserDynamicPraise">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+            <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        </table>
+        <!--<table tableName="pq_captcha_type" domainObjectName="CaptchaType">-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--<columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+        <!--<columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="pq_mobile_captcha" domainObjectName="MobileCaptcha">-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--<columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+        <!--<columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="pq_user" domainObjectName="User">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<columnOverride column="lock_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+            <!--<columnOverride column="register_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+            <!--<columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+            <!--<columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="pq_user_log_login" domainObjectName="UserLogLogin">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<columnOverride column="login_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+        <!--</table>-->
+        <!--<table tableName="pq_user_log_modify" domainObjectName="UserLogModify">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+        <!--</table>-->
     </context>
 </generatorConfiguration>

@@ -6,6 +6,7 @@ import com.pq.user.entity.User;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.form.AuthForm;
+import com.pq.user.form.FeedbackForm;
 import com.pq.user.form.ForgetPasswordForm;
 import com.pq.user.service.*;
 import com.pq.user.utils.UserResult;
@@ -150,6 +151,23 @@ public class UserController {
             User user = userService.getUserByUserId(userModifyDto.getUserId());
             user.setAddress(userModifyDto.getAddress());
             userService.updateUserInfo(user);
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+    @PostMapping("/feedback")
+    @ResponseBody
+    public UserResult feedback(@RequestBody FeedbackForm feedbackForm) {
+        UserResult result = new UserResult();
+        try {
+            userService.feedback(feedbackForm.getUserId(),feedbackForm.getContent());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

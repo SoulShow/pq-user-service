@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pq.user.mapper.UserDynamicCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.pq.user.entity.UserDynamicComment" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="dynamic_id" property="dynamicId" jdbcType="BIGINT" />
+    <result column="originator_user_id" property="originatorUserId" jdbcType="VARCHAR" />
+    <result column="originator_name" property="originatorName" jdbcType="VARCHAR" />
+    <result column="receiver_user_id" property="receiverUserId" jdbcType="VARCHAR" />
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pq_user_dynamic_comment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pq.user.entity.UserDynamicComment" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pq_user_dynamic_comment (dynamic_id, originator_user_id, originator_name, 
+      receiver_user_id, receiver_name, content, 
+      state, created_time, updated_time
+      )
+    values (#{dynamicId,jdbcType=BIGINT}, #{originatorUserId,jdbcType=VARCHAR}, #{originatorName,jdbcType=VARCHAR}, 
+      #{receiverUserId,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.UserDynamicComment" >
+    update pq_user_dynamic_comment
+    set dynamic_id = #{dynamicId,jdbcType=BIGINT},
+      originator_user_id = #{originatorUserId,jdbcType=VARCHAR},
+      originator_name = #{originatorName,jdbcType=VARCHAR},
+      receiver_user_id = #{receiverUserId,jdbcType=VARCHAR},
+      receiver_name = #{receiverName,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, dynamic_id, originator_user_id, originator_name, receiver_user_id, receiver_name, 
+    content, state, created_time, updated_time
+    from pq_user_dynamic_comment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, dynamic_id, originator_user_id, originator_name, receiver_user_id, receiver_name, 
+    content, state, created_time, updated_time
+    from pq_user_dynamic_comment
+  </select>
+
+  <select id="selectByDynamicId" resultMap="BaseResultMap" >
+    select id, dynamic_id, originator_user_id, originator_name, receiver_user_id, receiver_name,
+    content, state, created_time, updated_time
+    from pq_user_dynamic_comment
+    where dynamic_id = #{dynamicId}
+    and state = 1
+    order by created_time desc
+  </select>
+</mapper>

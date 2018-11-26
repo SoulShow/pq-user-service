@@ -9,12 +9,14 @@ import com.pq.user.dto.AgencyUserDto;
 import com.pq.user.dto.RegisterRequestDto;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
+import com.pq.user.entity.UserFeedBack;
 import com.pq.user.entity.UserLogLogin;
 import com.pq.user.entity.UserLogModify;
 import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.feign.AgencyFeign;
+import com.pq.user.mapper.UserFeedBackMapper;
 import com.pq.user.mapper.UserLogLoginMapper;
 import com.pq.user.mapper.UserLogModifyMapper;
 import com.pq.user.mapper.UserMapper;
@@ -67,17 +69,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AgencyFeign agencyFeign;
+    @Autowired
+    private UserFeedBackMapper userFeedBackMapper;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public UserDto getUserDtoByUserId(String userId) {
-
         User userEntity = userMapper.selectByUserId(userId);
         if (userEntity == null) {
             UserException.raise(UserErrors.USER_NOT_FOUND);
         }
-       return transformUserEntityToUserDto(userEntity);
+        return  transformUserEntityToUserDto(userEntity);
     }
 
     @Override
@@ -251,6 +254,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void insert(User user) {
         userMapper.insert(user);
+    }
+    @Override
+    public void feedback(String userId ,String content){
+        UserFeedBack userFeedBack = new UserFeedBack();
+        userFeedBack.setUserId(userId);
+        userFeedBack.setContent(content);
+        userFeedBack.setStatus(0);
+        userFeedBack.setCreatedTime(DateUtil.currentTime());
+        userFeedBack.setUpdatedTime(DateUtil.currentTime());
+        userFeedBackMapper.insert(userFeedBack);
     }
 
 }
