@@ -3,6 +3,7 @@ package com.pq.user.service.impl;
 import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
+import com.pq.common.util.StringUtil;
 import com.pq.user.dto.DynamicCommentDto;
 import com.pq.user.dto.DynamicPraiseDto;
 import com.pq.user.dto.UserDynamicDto;
@@ -122,14 +123,21 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamicMapper.insert(userDynamic);
 
         for(String img : userDynamicForm.getImgList()){
-            UserDynamicImg userDynamicImg = new UserDynamicImg();
-            userDynamicImg.setDynamicId(userDynamic.getId());
-            userDynamicImg.setImg(img);
-            userDynamicImg.setState(CommonConstants.PQ_STATE_VALID);
-            userDynamicImg.setCreatedTime(DateUtil.currentTime());
-            userDynamicImg.setUpdatedTime(DateUtil.currentTime());
-            userDynamicImgMapper.insert(userDynamicImg);
+            createImg(img,userDynamic.getId(),ConstantsUser.USER_DYNAMIC_IMG_TYPE_IMG);
         }
+        if(!StringUtil.isEmpty(userDynamicForm.getMovieUrl())){
+            createImg(userDynamicForm.getMovieUrl(),userDynamic.getId(),ConstantsUser.USER_DYNAMIC_IMG_TYPE_MOVIE);
+        }
+    }
+    private void createImg(String img,Long id,int type){
+        UserDynamicImg userDynamicImg = new UserDynamicImg();
+        userDynamicImg.setDynamicId(id);
+        userDynamicImg.setImg(img);
+        userDynamicImg.setType(type);
+        userDynamicImg.setState(CommonConstants.PQ_STATE_VALID);
+        userDynamicImg.setCreatedTime(DateUtil.currentTime());
+        userDynamicImg.setUpdatedTime(DateUtil.currentTime());
+        userDynamicImgMapper.insert(userDynamicImg);
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
