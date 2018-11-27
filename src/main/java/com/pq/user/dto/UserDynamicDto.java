@@ -9,6 +9,8 @@ public class UserDynamicDto {
 
     private String name;
 
+    private String avatar;
+
     private String content;
 
     private Integer praiseCount;
@@ -121,5 +123,13 @@ public class UserDynamicDto {
 
     public void setPraiseState(int praiseState) {
         this.praiseState = praiseState;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

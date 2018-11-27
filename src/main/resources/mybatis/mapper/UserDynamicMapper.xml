@@ -88,4 +88,12 @@
     order by created_time desc
     limit #{offset},#{size}
   </select>
+
+  <update id="addCommentCountById" >
+    update pq_user_dynamic
+    set
+      comment_count = comment_count + 1,
+      updated_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

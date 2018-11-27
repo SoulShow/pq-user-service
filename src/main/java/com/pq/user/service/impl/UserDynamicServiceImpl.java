@@ -4,9 +4,7 @@ import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
 import com.pq.common.util.StringUtil;
-import com.pq.user.dto.DynamicCommentDto;
-import com.pq.user.dto.DynamicPraiseDto;
-import com.pq.user.dto.UserDynamicDto;
+import com.pq.user.dto.*;
 import com.pq.user.entity.UserDynamic;
 import com.pq.user.entity.UserDynamicComment;
 import com.pq.user.entity.UserDynamicImg;
@@ -18,10 +16,7 @@ import com.pq.user.form.CancelPraiseDynamicForm;
 import com.pq.user.form.PraiseDynamicForm;
 import com.pq.user.form.UserDynamicCommentForm;
 import com.pq.user.form.UserDynamicForm;
-import com.pq.user.mapper.UserDynamicCommentMapper;
-import com.pq.user.mapper.UserDynamicImgMapper;
-import com.pq.user.mapper.UserDynamicMapper;
-import com.pq.user.mapper.UserDynamicPraiseMapper;
+import com.pq.user.mapper.*;
 import com.pq.user.service.UserDynamicService;
 import com.pq.user.utils.ConstantsUser;
 import com.pq.user.utils.UserResult;
@@ -46,6 +41,8 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     private UserDynamicPraiseMapper userDynamicPraiseMapper;
     @Autowired
     private UserDynamicCommentMapper userDynamicCommentMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public List<UserDynamicDto> getUserDynamicList(Long agencyClassId,String userId, int offset, int size){
@@ -58,6 +55,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             userDynamicDto.setId(userDynamic.getId());
             userDynamicDto.setUserId(userDynamic.getUserId());
             userDynamicDto.setName(userDynamic.getName());
+            userDynamicDto.setAvatar(userMapper.selectByUserId(userId).getAvatar());
             userDynamicDto.setContent(userDynamic.getContent());
             userDynamicDto.setPraiseCount(userDynamic.getPraiseCount());
             userDynamicDto.setCommentCount(userDynamic.getCommentCount());
@@ -74,38 +72,50 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             }
             userDynamicDto.setImgList(imgs);
 
-            List<UserDynamicPraise> praiseList = userDynamicPraiseMapper.selectByDynamicId(userDynamic.getId());
-            List<DynamicPraiseDto> dynamicPraiseDtoList = new ArrayList<>();
-            for(UserDynamicPraise userDynamicPraise:praiseList){
-                if(userId.equals(userDynamicPraise.getUserId())){
+            userDynamicDto.setPraiseList(getDynamicPraiseDtoList(userDynamic));
+            for(DynamicPraiseDto dynamicPraiseDto:userDynamicDto.getPraiseList()){
+                if(userId.equals(dynamicPraiseDto.getUserId())){
                     userDynamicDto.setPraiseState(1);
                 }
-                DynamicPraiseDto dynamicPraiseDto = new DynamicPraiseDto();
-                dynamicPraiseDto.setId(userDynamicPraise.getId());
-                dynamicPraiseDto.setName(userDynamicPraise.getName());
-                dynamicPraiseDto.setUserId(userDynamicPraise.getUserId());
-                dynamicPraiseDtoList.add(dynamicPraiseDto);
             }
-            userDynamicDto.setPraiseList(dynamicPraiseDtoList);
-            List<UserDynamicComment> commentList = userDynamicCommentMapper.selectByDynamicId(userDynamic.getId());
-            List<DynamicCommentDto> dynamicCommentDtos = new ArrayList<>();
-            for(UserDynamicComment dynamicComment:commentList){
-                DynamicCommentDto dynamicCommentDto = new DynamicCommentDto();
-                dynamicCommentDto.setId(dynamicComment.getId());
-                dynamicCommentDto.setDynamicId(dynamicComment.getDynamicId());
-                dynamicCommentDto.setOriginatorUserId(dynamicComment.getOriginatorUserId());
-                dynamicCommentDto.setOriginatorName(dynamicComment.getOriginatorName());
-                dynamicCommentDto.setReceiverUserId(dynamicComment.getReceiverUserId());
-                dynamicCommentDto.setReceiverName(dynamicComment.getReceiverName());
-                dynamicCommentDto.setContent(dynamicComment.getContent());
-                dynamicCommentDtos.add(dynamicCommentDto);
-            }
-            userDynamicDto.setCommentList(dynamicCommentDtos);
+
+            userDynamicDto.setCommentList(getdynamicCommentDtolist(userDynamic));
 
             dynamicDtoList.add(userDynamicDto);
         }
         return dynamicDtoList;
     }
+
+    private List<DynamicPraiseDto> getDynamicPraiseDtoList(UserDynamic userDynamic){
+        List<DynamicPraiseDto> dynamicPraiseDtoList = new ArrayList<>();
+        List<UserDynamicPraise> praiseList = userDynamicPraiseMapper.selectByDynamicId(userDynamic.getId());
+        for(UserDynamicPraise userDynamicPraise:praiseList){
+            DynamicPraiseDto dynamicPraiseDto = new DynamicPraiseDto();
+            dynamicPraiseDto.setId(userDynamicPraise.getId());
+            dynamicPraiseDto.setName(userDynamicPraise.getName());
+            dynamicPraiseDto.setUserId(userDynamicPraise.getUserId());
+            dynamicPraiseDtoList.add(dynamicPraiseDto);
+        }
+        return dynamicPraiseDtoList;
+    }
+
+    private List<DynamicCommentDto> getdynamicCommentDtolist(UserDynamic userDynamic){
+        List<UserDynamicComment> commentList = userDynamicCommentMapper.selectByDynamicId(userDynamic.getId());
+        List<DynamicCommentDto> dynamicCommentDtos = new ArrayList<>();
+        for(UserDynamicComment dynamicComment:commentList){
+            DynamicCommentDto dynamicCommentDto = new DynamicCommentDto();
+            dynamicCommentDto.setId(dynamicComment.getId());
+            dynamicCommentDto.setDynamicId(dynamicComment.getDynamicId());
+            dynamicCommentDto.setOriginatorUserId(dynamicComment.getOriginatorUserId());
+            dynamicCommentDto.setOriginatorName(dynamicComment.getOriginatorName());
+            dynamicCommentDto.setReceiverUserId(dynamicComment.getReceiverUserId());
+            dynamicCommentDto.setReceiverName(dynamicComment.getReceiverName());
+            dynamicCommentDto.setContent(dynamicComment.getContent());
+            dynamicCommentDtos.add(dynamicCommentDto);
+        }
+        return dynamicCommentDtos;
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -141,7 +151,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Long praiseDynamic(PraiseDynamicForm praiseDynamicForm){
+    public PraiseDto praiseDynamic(PraiseDynamicForm praiseDynamicForm){
         UserDynamicPraise dynamicPraise = new UserDynamicPraise();
         dynamicPraise.setDynamicId(praiseDynamicForm.getDynamicId());
         dynamicPraise.setUserId(praiseDynamicForm.getUserId());
@@ -152,7 +162,12 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamicPraiseMapper.insert(dynamicPraise);
 
         userDynamicMapper.addPraiseCountById(dynamicPraise.getDynamicId());
-        return dynamicPraise.getId();
+
+        UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(dynamicPraise.getDynamicId());
+        PraiseDto praiseDto = new PraiseDto();
+        praiseDto.setList(getDynamicPraiseDtoList(userDynamic));
+        praiseDto.setPraiseCount(userDynamic.getPraiseCount());
+        return praiseDto;
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -166,14 +181,22 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     }
 
     @Override
-    public Long createDynamicComment(UserDynamicCommentForm dynamicCommentForm){
+    @Transactional(rollbackFor = Exception.class)
+    public CommentDto createDynamicComment(UserDynamicCommentForm dynamicCommentForm){
         UserDynamicComment userDynamicComment = new UserDynamicComment();
         BeanUtils.copyProperties(dynamicCommentForm,userDynamicComment);
         userDynamicComment.setState(CommonConstants.PQ_STATE_VALID);
         userDynamicComment.setCreatedTime(DateUtil.currentTime());
         userDynamicComment.setUpdatedTime(DateUtil.currentTime());
         userDynamicCommentMapper.insert(userDynamicComment);
-        return userDynamicComment.getId();
+
+        userDynamicMapper.addCommentCountById(userDynamicComment.getDynamicId());
+
+        UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(userDynamicComment.getDynamicId());
+        CommentDto commentDto = new CommentDto();
+        commentDto.setCommentCount(userDynamic.getCommentCount());
+        commentDto.setList(getdynamicCommentDtolist(userDynamic));
+        return commentDto;
     }
 
 

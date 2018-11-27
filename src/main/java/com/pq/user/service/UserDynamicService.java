@@ -1,6 +1,8 @@
 package com.pq.user.service;
 
 
+import com.pq.user.dto.CommentDto;
+import com.pq.user.dto.PraiseDto;
 import com.pq.user.dto.UserDynamicDto;
 import com.pq.user.form.CancelPraiseDynamicForm;
 import com.pq.user.form.PraiseDynamicForm;
@@ -38,7 +40,7 @@ public interface UserDynamicService {
      * @param praiseDynamicForm
      * @return
      */
-    Long praiseDynamic(PraiseDynamicForm praiseDynamicForm);
+    PraiseDto praiseDynamic(PraiseDynamicForm praiseDynamicForm);
 
     /**
      * 取消点赞
@@ -52,5 +54,5 @@ public interface UserDynamicService {
      * @param dynamicCommentForm
      * @return
      */
-    Long createDynamicComment(UserDynamicCommentForm dynamicCommentForm);
+    CommentDto createDynamicComment(UserDynamicCommentForm dynamicCommentForm);
 }

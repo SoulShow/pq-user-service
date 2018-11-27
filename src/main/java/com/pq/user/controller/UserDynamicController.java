@@ -75,7 +75,7 @@ public class UserDynamicController {
 
     @PostMapping("/praise")
     @ResponseBody
-    public UserResult<Long> praiseDynamic(@RequestBody PraiseDynamicForm praiseDynamicForm) {
+    public UserResult praiseDynamic(@RequestBody PraiseDynamicForm praiseDynamicForm) {
         UserResult result = new UserResult();
         try {
             result.setData(dynamicService.praiseDynamic(praiseDynamicForm));
@@ -107,7 +107,7 @@ public class UserDynamicController {
     }
     @PostMapping("/comment")
     @ResponseBody
-    public UserResult<Long> createDynamicComment(@RequestBody UserDynamicCommentForm dynamicCommentForm) {
+    public UserResult createDynamicComment(@RequestBody UserDynamicCommentForm dynamicCommentForm) {
         UserResult result = new UserResult();
         try {
             result.setData(dynamicService.createDynamicComment(dynamicCommentForm));

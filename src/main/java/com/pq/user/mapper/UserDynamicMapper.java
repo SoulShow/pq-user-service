@@ -26,4 +26,6 @@ public interface UserDynamicMapper {
 
     void subPraiseCountById(@Param("id") Long id);
 
+    void addCommentCountById(@Param("id") Long id);
+
 }
