@@ -47,7 +47,7 @@ public interface UserDynamicService {
      * @param cancelPraiseDynamicForm
      * @return
      */
-    void cancelPraiseDynamic(CancelPraiseDynamicForm cancelPraiseDynamicForm);
+    PraiseDto cancelPraiseDynamic(CancelPraiseDynamicForm cancelPraiseDynamicForm);
 
     /**
      * 发表评论

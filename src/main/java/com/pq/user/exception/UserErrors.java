@@ -42,6 +42,7 @@ public class UserErrors extends CommonErrors {
     public final static ErrorCode USER_INFO_NOT_MATCH_ERROR = new UserErrorCode("1006", "设置密码必须本人操作");
     public final static ErrorCode USER_PASSWORD_IS_EXIST_ERROR = new UserErrorCode("1007", "请填写正确的旧密码");
 
+    public final static ErrorCode USER_PRAISE_IS_EXIST_ERROR = new UserErrorCode("1008", "此用已经点过赞");
 
 
 }

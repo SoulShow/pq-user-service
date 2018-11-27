@@ -94,7 +94,7 @@ public class UserDynamicController {
     public UserResult cancelPraiseDynamic(@RequestBody CancelPraiseDynamicForm cancelPraiseDynamicForm) {
         UserResult result = new UserResult();
         try {
-            dynamicService.cancelPraiseDynamic(cancelPraiseDynamicForm);
+            result.setData(dynamicService.cancelPraiseDynamic(cancelPraiseDynamicForm));
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

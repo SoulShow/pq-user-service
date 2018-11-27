@@ -52,4 +52,12 @@
     and state = 1
     order by created_time desc
   </select>
+
+  <select id="selectByDynamicIdAndUserId" resultMap="BaseResultMap" >
+    select id, dynamic_id, user_id, name, state, created_time, updated_time
+    from pq_user_dynamic_praise
+    where dynamic_id = #{dynamicId}
+    and state = 1
+    and user_id = #{userId}
+  </select>
 </mapper>

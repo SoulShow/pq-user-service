@@ -17,4 +17,6 @@ public interface UserDynamicPraiseMapper {
     int updateByPrimaryKey(UserDynamicPraise record);
 
     List<UserDynamicPraise> selectByDynamicId(@Param("dynamicId")Long dynamicId);
+
+    UserDynamicPraise selectByDynamicIdAndUserId(@Param("dynamicId")Long dynamicId,@Param("userId")String userId);
 }

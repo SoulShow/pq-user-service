@@ -4,7 +4,7 @@ public class CancelPraiseDynamicForm {
 
     private Long dynamicId;
 
-    private Long praiseId;
+    private String userId;
 
     public Long getDynamicId() {
         return dynamicId;
@@ -14,11 +14,11 @@ public class CancelPraiseDynamicForm {
         this.dynamicId = dynamicId;
     }
 
-    public Long getPraiseId() {
-        return praiseId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setPraiseId(Long praiseId) {
-        this.praiseId = praiseId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
