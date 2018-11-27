@@ -50,7 +50,7 @@
     from pq_user_dynamic_praise
     where dynamic_id = #{dynamicId}
     and state = 1
-    order by created_time desc
+    order by created_time asc
   </select>
 
   <select id="selectByDynamicIdAndUserId" resultMap="BaseResultMap" >
