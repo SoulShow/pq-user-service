@@ -44,5 +44,8 @@ public class UserErrors extends CommonErrors {
 
     public final static ErrorCode USER_PRAISE_IS_EXIST_ERROR = new UserErrorCode("1008", "此用已经点过赞");
 
+    public final static ErrorCode USER_DYNAMIC_NOT_EXIST_ERROR = new UserErrorCode("1009", "用户动态不存在");
+
+    public final static ErrorCode USER_DYNAMIC_CAN_NOT_DELETE_ERROR = new UserErrorCode("1010", "此用户无删除权限");
 
 }

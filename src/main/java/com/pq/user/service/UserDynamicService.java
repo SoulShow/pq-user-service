@@ -55,4 +55,13 @@ public interface UserDynamicService {
      * @return
      */
     CommentDto createDynamicComment(UserDynamicCommentForm dynamicCommentForm);
+
+
+    /**
+     * 删除动态
+     * @param id
+     * @param userId
+     * @return
+     */
+    void deleteDynamic(Long id, String userId);
 }

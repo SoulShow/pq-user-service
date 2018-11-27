@@ -213,6 +213,20 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         commentDto.setList(getDynamicCommentDtolist(userDynamic));
         return commentDto;
     }
+    @Override
+    public void deleteDynamic(Long id, String userId){
+        UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(id);
+        if(userDynamic==null){
+            UserException.raise(UserErrors.USER_DYNAMIC_NOT_EXIST_ERROR);
+        }
+        if(!userId.equals(userDynamic.getUserId())){
+            UserException.raise(UserErrors.USER_DYNAMIC_CAN_NOT_DELETE_ERROR);
+        }
+        userDynamic.setState(CommonConstants.PQ_STATE_UN_VALID);
+        userDynamic.setUpdatedTime(DateUtil.currentTime());
+        userDynamicMapper.updateByPrimaryKey(userDynamic);
+    }
+
 
 
 }

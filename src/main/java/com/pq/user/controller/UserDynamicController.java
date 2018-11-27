@@ -121,5 +121,20 @@ public class UserDynamicController {
         }
         return result;
     }
-
+    @PostMapping("delete")
+    @ResponseBody
+    public UserResult deleteDynamic(@RequestBody UserDynamicDelForm dynamicDelForm) {
+        UserResult result = new UserResult();
+        try {
+            dynamicService.deleteDynamic(dynamicDelForm.getDynamicId(),dynamicDelForm.getUserId());
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
 }

@@ -46,6 +46,7 @@
     updated_time, agency_class_id
     from pq_user_dynamic
     where id = #{id,jdbcType=BIGINT}
+    and state = 1
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, user_id, name, content, praise_count, comment_count, state, created_time, 
