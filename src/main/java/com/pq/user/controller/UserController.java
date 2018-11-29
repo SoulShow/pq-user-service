@@ -1,5 +1,6 @@
 package com.pq.user.controller;
 
+import com.pq.common.captcha.UserCaptchaType;
 import com.pq.common.exception.CommonErrors;
 import com.pq.user.dto.*;
 import com.pq.user.entity.User;
@@ -107,6 +108,11 @@ public class UserController {
         UserResult result = new UserResult();
         try {
             User user = userService.getUserByPhone(updatePhoneDto.getAccount());
+            User newUser = userService.getUserByPhone(updatePhoneDto.getNewPhone());
+            if(newUser!=null){
+                UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
+            }
+            mobileCaptchaService.verify(updatePhoneDto.getNewPhone(),UserCaptchaType.COMMIT_PHONE.getIndex(),updatePhoneDto.getVerCode());
             user.setPhone(updatePhoneDto.getNewPhone());
             user.setUsername(updatePhoneDto.getNewPhone());
             userService.updateUserInfo(user);

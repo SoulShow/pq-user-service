@@ -70,7 +70,7 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
         if (user != null && user.getStatus() == ConstantsUser.USER_STATUS_LOCKED) {
             UserException.raise(UserErrors.USER_IS_LOCKED);
         }
-        if (UserCaptchaType.REGISTER.getCode().equals(type)) {
+        if (UserCaptchaType.REGISTER.getCode().equals(type)||UserCaptchaType.COMMIT_PHONE.getCode().equals(type)) {
             if (user != null) {
                 UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
             }
