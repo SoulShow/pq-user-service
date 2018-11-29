@@ -8,7 +8,6 @@ public class RegisterRequestDto {
     private String phone;
     private String password;
     private int role;
-    private int relation;
     private Boolean agree;
     private int requestFrom;
 
@@ -42,14 +41,6 @@ public class RegisterRequestDto {
 
     public void setRequestFrom(int requestFrom) {
         this.requestFrom = requestFrom;
-    }
-
-    public int getRelation() {
-        return relation;
-    }
-
-    public void setRelation(int relation) {
-        this.relation = relation;
     }
 
     public int getRole() {

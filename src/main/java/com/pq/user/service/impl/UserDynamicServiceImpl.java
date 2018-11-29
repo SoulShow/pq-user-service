@@ -1,7 +1,6 @@
 package com.pq.user.service.impl;
 
 import com.pq.common.constants.CommonConstants;
-import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
 import com.pq.common.util.StringUtil;
 import com.pq.user.dto.*;
@@ -9,10 +8,8 @@ import com.pq.user.entity.UserDynamic;
 import com.pq.user.entity.UserDynamicComment;
 import com.pq.user.entity.UserDynamicImg;
 import com.pq.user.entity.UserDynamicPraise;
-import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
-import com.pq.user.feign.AgencyFeign;
 import com.pq.user.form.CancelPraiseDynamicForm;
 import com.pq.user.form.PraiseDynamicForm;
 import com.pq.user.form.UserDynamicCommentForm;
@@ -20,7 +17,6 @@ import com.pq.user.form.UserDynamicForm;
 import com.pq.user.mapper.*;
 import com.pq.user.service.UserDynamicService;
 import com.pq.user.utils.ConstantsUser;
-import com.pq.user.utils.UserResult;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("")
     @ResponseBody
-    public UserResult<Integer> getUserInfo(@RequestParam(value = "userId")String userId) {
+    public UserResult<UserDto> getUserInfo(@RequestParam(value = "userId")String userId) {
         UserResult result = new UserResult();
         try {
             result.setData(userService.getUserDtoByUserId(userId));
@@ -45,6 +45,24 @@ public class UserController {
         }
         return result;
     }
+
+    @GetMapping("/info")
+    @ResponseBody
+    public UserResult<User> getUserBaseInfo(@RequestParam(value = "userId")String userId) {
+        UserResult result = new UserResult();
+        try {
+            result.setData(userService.getUserByUserId(userId));
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
 
     @GetMapping("/captcha")
     @ResponseBody
