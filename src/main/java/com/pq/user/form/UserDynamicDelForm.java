@@ -5,6 +5,8 @@ public class UserDynamicDelForm {
 
     private Long dynamicId;
 
+    private Long studentId;
+
     public String getUserId() {
         return userId;
     }
@@ -20,5 +22,13 @@ public class UserDynamicDelForm {
 
     public void setDynamicId(Long dynamicId) {
         this.dynamicId = dynamicId;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

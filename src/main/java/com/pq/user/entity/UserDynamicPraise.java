@@ -7,6 +7,8 @@ public class UserDynamicPraise {
 
     private Long dynamicId;
 
+    private Long studentId;
+
     private String userId;
 
     private String name;
@@ -71,5 +73,13 @@ public class UserDynamicPraise {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

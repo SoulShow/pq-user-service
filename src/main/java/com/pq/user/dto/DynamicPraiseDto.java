@@ -5,6 +5,8 @@ public class DynamicPraiseDto {
 
     private String userId;
 
+    private Long studentId;
+
     private String name;
 
     public String getUserId() {
@@ -29,5 +31,13 @@ public class DynamicPraiseDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

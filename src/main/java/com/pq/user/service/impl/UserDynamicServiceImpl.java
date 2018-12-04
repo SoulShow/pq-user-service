@@ -42,7 +42,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     private UserMapper userMapper;
 
     @Override
-    public List<UserDynamicDto> getUserDynamicList(Long agencyClassId,String userId, int offset, int size){
+    public List<UserDynamicDto> getUserDynamicList(Long agencyClassId,Long studentId,String userId, int offset, int size){
 
         List<UserDynamicDto> dynamicDtoList = new ArrayList<>();
         List<UserDynamic> userDynamicList = userDynamicMapper.selectUserClassDynamicByClassId(agencyClassId,offset,size);
@@ -71,7 +71,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
 
             userDynamicDto.setPraiseList(getDynamicPraiseDtoList(userDynamic));
             for(DynamicPraiseDto dynamicPraiseDto:userDynamicDto.getPraiseList()){
-                if(userId.equals(dynamicPraiseDto.getUserId())){
+                if(userId.equals(dynamicPraiseDto.getUserId())&& studentId.equals(dynamicPraiseDto.getStudentId())){
                     userDynamicDto.setPraiseState(1);
                 }
             }
@@ -91,6 +91,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             dynamicPraiseDto.setId(userDynamicPraise.getId());
             dynamicPraiseDto.setName(userDynamicPraise.getName());
             dynamicPraiseDto.setUserId(userDynamicPraise.getUserId());
+            dynamicPraiseDto.setStudentId(userDynamicPraise.getStudentId());
             dynamicPraiseDtoList.add(dynamicPraiseDto);
         }
         return dynamicPraiseDtoList;
@@ -120,6 +121,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         UserDynamic userDynamic = new UserDynamic();
         userDynamic.setUserId(userDynamicForm.getUserId());
         userDynamic.setAgencyClassId(userDynamicForm.getAgencyClassId());
+        userDynamic.setStudentId(userDynamicForm.getStudentId());
         userDynamic.setName(userDynamicForm.getName());
         userDynamic.setContent(userDynamicForm.getContent());
         userDynamic.setPraiseCount(0);
@@ -151,13 +153,15 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     public PraiseDto praiseDynamic(PraiseDynamicForm praiseDynamicForm){
 
         UserDynamicPraise dynamicPraise = userDynamicPraiseMapper.
-                selectByDynamicIdAndUserId(praiseDynamicForm.getDynamicId(),praiseDynamicForm.getUserId());
+                selectByDynamicIdAndUserIdAndStudentId(praiseDynamicForm.getDynamicId(),praiseDynamicForm.getUserId(),
+                        praiseDynamicForm.getStudentId());
         if(dynamicPraise!=null){
             UserException.raise(UserErrors.USER_PRAISE_IS_EXIST_ERROR);
         }
-         dynamicPraise = new UserDynamicPraise();
+        dynamicPraise = new UserDynamicPraise();
         dynamicPraise.setDynamicId(praiseDynamicForm.getDynamicId());
         dynamicPraise.setUserId(praiseDynamicForm.getUserId());
+        dynamicPraise.setStudentId(praiseDynamicForm.getStudentId());
         dynamicPraise.setName(praiseDynamicForm.getName());
         dynamicPraise.setState(CommonConstants.PQ_STATE_VALID);
         dynamicPraise.setUpdatedTime(DateUtil.currentTime());
@@ -175,8 +179,8 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public PraiseDto cancelPraiseDynamic(CancelPraiseDynamicForm cancelPraiseDynamicForm){
-        UserDynamicPraise dynamicPraise = userDynamicPraiseMapper.selectByDynamicIdAndUserId(cancelPraiseDynamicForm.getDynamicId(),
-                cancelPraiseDynamicForm.getUserId());
+        UserDynamicPraise dynamicPraise = userDynamicPraiseMapper.selectByDynamicIdAndUserIdAndStudentId(cancelPraiseDynamicForm.getDynamicId(),
+                cancelPraiseDynamicForm.getUserId(),cancelPraiseDynamicForm.getStudentId());
 
         dynamicPraise.setState(CommonConstants.PQ_STATE_UN_VALID);
         dynamicPraise.setUpdatedTime(DateUtil.currentTime());
@@ -210,12 +214,12 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         return commentDto;
     }
     @Override
-    public void deleteDynamic(Long id, String userId){
+    public void deleteDynamic(Long id, String userId,Long studentId){
         UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(id);
         if(userDynamic==null){
             UserException.raise(UserErrors.USER_DYNAMIC_NOT_EXIST_ERROR);
         }
-        if(!userId.equals(userDynamic.getUserId())){
+        if(!userId.equals(userDynamic.getUserId())||!studentId.equals(userDynamic.getStudentId())){
             UserException.raise(UserErrors.USER_DYNAMIC_CAN_NOT_DELETE_ERROR);
         }
         userDynamic.setState(CommonConstants.PQ_STATE_UN_VALID);

@@ -20,12 +20,13 @@ public interface UserDynamicService {
     /**
      * 获取动态列表
      * @param agencyClassId
+     * @param studentId
      * @param userId
      * @param offset
      * @param size
      * @return
      */
-    List<UserDynamicDto> getUserDynamicList(Long agencyClassId,String userId, int offset,int size);
+    List<UserDynamicDto> getUserDynamicList(Long agencyClassId,Long studentId,String userId, int offset,int size);
 
 
     /**
@@ -61,7 +62,8 @@ public interface UserDynamicService {
      * 删除动态
      * @param id
      * @param userId
+     * @param studentId
      * @return
      */
-    void deleteDynamic(Long id, String userId);
+    void deleteDynamic(Long id, String userId,Long studentId);
 }

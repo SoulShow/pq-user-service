@@ -6,6 +6,8 @@ public class CancelPraiseDynamicForm {
 
     private String userId;
 
+    private Long studentId;
+
     public Long getDynamicId() {
         return dynamicId;
     }
@@ -20,5 +22,13 @@ public class CancelPraiseDynamicForm {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

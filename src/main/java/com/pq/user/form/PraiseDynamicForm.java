@@ -6,6 +6,8 @@ public class PraiseDynamicForm {
 
     private String userId;
 
+    private Long studentId;
+
     private String name;
 
     public String getUserId() {
@@ -32,4 +34,11 @@ public class PraiseDynamicForm {
         this.dynamicId = dynamicId;
     }
 
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
 }

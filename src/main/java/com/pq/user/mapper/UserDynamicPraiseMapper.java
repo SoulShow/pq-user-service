@@ -18,5 +18,6 @@ public interface UserDynamicPraiseMapper {
 
     List<UserDynamicPraise> selectByDynamicId(@Param("dynamicId")Long dynamicId);
 
-    UserDynamicPraise selectByDynamicIdAndUserId(@Param("dynamicId")Long dynamicId,@Param("userId")String userId);
+    UserDynamicPraise selectByDynamicIdAndUserIdAndStudentId(@Param("dynamicId")Long dynamicId,@Param("userId")String userId,
+                                                             @Param("studentId")Long studentId);
 }

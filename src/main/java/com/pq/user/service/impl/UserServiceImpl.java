@@ -168,6 +168,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setRegisterTime(currentTime);
         userEntity.setCreatedTime(currentTime);
         userEntity.setUpdatedTime(currentTime);
+        userEntity.setRole(registerRequestDto.getRole());
         userEntity.setRequestFrom(registerRequestDto.getRequestFrom());
         try {
             userMapper.insert(userEntity);

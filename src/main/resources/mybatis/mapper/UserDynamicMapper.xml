@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="agency_class_id" property="agencyClassId" jdbcType="BIGINT" />
+    <result column="student_id" property="studentId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="praise_count" property="praiseCount" jdbcType="INTEGER" />
@@ -23,10 +24,10 @@
     </selectKey>
     insert into pq_user_dynamic (user_id, name, content, 
       praise_count, comment_count, state, 
-      created_time, updated_time, agency_class_id)
+      created_time, updated_time, agency_class_id,student_id)
     values (#{userId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{praiseCount,jdbcType=INTEGER}, #{commentCount,jdbcType=INTEGER}, #{state,jdbcType=INTEGER},
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{agencyClassId})
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{agencyClassId},#{studentId})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.UserDynamic" >
     update pq_user_dynamic
@@ -38,25 +39,26 @@
       state = #{state,jdbcType=INTEGER},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-      agency_class_id = #{agencyClassId}
+      agency_class_id = #{agencyClassId},
+      student_id = #{studentId}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, user_id, name, content, praise_count, comment_count, state, created_time, 
-    updated_time, agency_class_id
+    updated_time, agency_class_id,student_id
     from pq_user_dynamic
     where id = #{id,jdbcType=BIGINT}
     and state = 1
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, user_id, name, content, praise_count, comment_count, state, created_time, 
-    updated_time, agency_class_id
+    updated_time, agency_class_id,student_id
     from pq_user_dynamic
   </select>
 
   <select id="selectUserClassDynamic" resultMap="BaseResultMap" >
     select id, user_id, name, content, praise_count, comment_count, state, created_time,
-    updated_time, agency_class_id
+    updated_time, agency_class_id,student_id
     from pq_user_dynamic
     where  agency_class_id in
     <foreach item="item" collection="classIdList" separator="," open="(" close=")">#{item}</foreach>
@@ -82,7 +84,7 @@
 
   <select id="selectUserClassDynamicByClassId" resultMap="BaseResultMap" >
     select id, user_id, name, content, praise_count, comment_count, state, created_time,
-    updated_time, agency_class_id
+    updated_time, agency_class_id,student_id
     from pq_user_dynamic
     where  agency_class_id = #{agencyClassId}
     and state = 1
