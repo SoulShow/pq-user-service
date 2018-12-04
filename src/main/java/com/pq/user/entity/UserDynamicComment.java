@@ -11,9 +11,13 @@ public class UserDynamicComment {
 
     private String originatorName;
 
+    private String originatorStudentId;
+
     private String receiverUserId;
 
     private String receiverName;
+
+    private String receiverStudentId;
 
     private String content;
 
@@ -101,5 +105,21 @@ public class UserDynamicComment {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public String getOriginatorStudentId() {
+        return originatorStudentId;
+    }
+
+    public void setOriginatorStudentId(String originatorStudentId) {
+        this.originatorStudentId = originatorStudentId;
+    }
+
+    public String getReceiverStudentId() {
+        return receiverStudentId;
+    }
+
+    public void setReceiverStudentId(String receiverStudentId) {
+        this.receiverStudentId = receiverStudentId;
     }
 }

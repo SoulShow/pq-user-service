@@ -106,8 +106,10 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             dynamicCommentDto.setDynamicId(dynamicComment.getDynamicId());
             dynamicCommentDto.setOriginatorUserId(dynamicComment.getOriginatorUserId());
             dynamicCommentDto.setOriginatorName(dynamicComment.getOriginatorName());
+            dynamicCommentDto.setOriginatorStudentId(dynamicComment.getOriginatorStudentId());
             dynamicCommentDto.setReceiverUserId(dynamicComment.getReceiverUserId());
             dynamicCommentDto.setReceiverName(dynamicComment.getReceiverName());
+            dynamicCommentDto.setReceiverStudentId(dynamicComment.getReceiverStudentId());
             dynamicCommentDto.setContent(dynamicComment.getContent());
             dynamicCommentDtos.add(dynamicCommentDto);
         }
