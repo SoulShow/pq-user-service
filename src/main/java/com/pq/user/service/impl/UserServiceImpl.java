@@ -184,7 +184,7 @@ public class UserServiceImpl implements UserService {
 
         HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("userName", registerRequestDto.getPhone());
-        paramMap.put("passWord", registerRequestDto.getPassword());
+        paramMap.put("passWord", registerRequestDto.getPhone());
         try {
             String result = HttpUtil.sendJson(phpUrl+"addUser",new HashMap<>(),JSON.toJSONString(paramMap));
             UserResult userResult = JSON.parseObject(result,UserResult.class);
