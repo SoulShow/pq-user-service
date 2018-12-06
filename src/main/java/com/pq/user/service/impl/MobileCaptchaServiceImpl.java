@@ -59,8 +59,8 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
     @Autowired
     private UserMapper userMapper;
 
-    @Value("${sms.url}")
-    private String smsUrl;
+    @Value("${php.url}")
+    private String phpUrl;
 
 
     @Override
@@ -136,7 +136,7 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
                     paramMap.put("code", mobileCaptcha.getCode());
                     paramMap.put("mobile", mobileCaptcha.getMobile());
                     paramMap.put("templateId", captchaType.getSmsTemplateId().toString());
-                    HttpUtil.sendJson(smsUrl,JSON.toJSONString(paramMap),new HashMap<>());
+                    HttpUtil.sendJson(phpUrl+"smsSend",JSON.toJSONString(paramMap),new HashMap<>());
                 }
             } catch (RuntimeException r) {
                 UserException.raise(new ErrorCode("99999", r.getMessage()));

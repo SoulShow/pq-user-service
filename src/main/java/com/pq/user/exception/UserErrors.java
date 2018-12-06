@@ -48,4 +48,6 @@ public class UserErrors extends CommonErrors {
 
     public final static ErrorCode USER_DYNAMIC_CAN_NOT_DELETE_ERROR = new UserErrorCode("1010", "此用户无删除权限");
 
+    public final static ErrorCode USER_HUANXIN_REGISTER_ERROR = new UserErrorCode("1011", "用户环信注册失败");
+
 }

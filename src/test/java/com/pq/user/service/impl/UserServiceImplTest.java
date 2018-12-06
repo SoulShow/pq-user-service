@@ -1,5 +1,6 @@
 package com.pq.user.service.impl;
 
+import com.google.gson.Gson;
 import com.pq.user.entity.MobileCaptcha;
 import com.pq.user.entity.User;
 import com.pq.user.mapper.MobileCaptchaMapper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -25,9 +27,11 @@ public class UserServiceImplTest {
     private MobileCaptchaMapper mobileCaptchaMapper;
     @Test
     public void getUserDtoByUserId() {
-        List<MobileCaptcha> list =  mobileCaptchaMapper.selectByMobileAndType("18000000000","user:updatePhone");
-
-        mobileCaptchaService.send("18000000000","user:updatePhone");
+        List<String> list = new ArrayList<>();
+        list.add("选项1");
+        list.add("选项2");
+        Gson gson = new Gson();
+        String ss = gson.toJson(list);
         System.out.print("");
     }
 

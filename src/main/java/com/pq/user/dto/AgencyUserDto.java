@@ -4,6 +4,8 @@ public class AgencyUserDto {
 
     private Long agencyClassId;
 
+    private Long groupId;
+
     private String userId;
 
     private Long studentId;
@@ -111,5 +113,13 @@ public class AgencyUserDto {
 
     public void setRelation(String relation) {
         this.relation = relation;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 }

@@ -1,5 +1,6 @@
 package com.pq.user.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.pq.common.constants.CacheKeyConstants;
 import com.pq.common.constants.ParentRelationTypeEnum;
 import com.pq.common.exception.CommonErrors;
@@ -38,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -71,6 +73,9 @@ public class UserServiceImpl implements UserService {
     private AgencyFeign agencyFeign;
     @Autowired
     private UserFeedBackMapper userFeedBackMapper;
+
+    @Value("${php.url}")
+    private String phpUrl;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -175,6 +180,20 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
             UserException.raise(UserErrors.REGISTER_ERROR);
+        }
+
+        HashMap<String, String> paramMap = new HashMap<>();
+        paramMap.put("userName", registerRequestDto.getPhone());
+        paramMap.put("passWord", registerRequestDto.getPassword());
+        try {
+            String result = HttpUtil.sendJson(phpUrl+"addUser",new HashMap<>(),JSON.toJSONString(paramMap));
+            UserResult userResult = JSON.parseObject(result,UserResult.class);
+            if(userResult==null||!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())){
+                UserException.raise(UserErrors.USER_HUANXIN_REGISTER_ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            UserException.raise(UserErrors.USER_HUANXIN_REGISTER_ERROR);
         }
         return userEntity.getUserId();
     }
