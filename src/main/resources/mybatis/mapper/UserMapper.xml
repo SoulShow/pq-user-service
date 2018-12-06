@@ -88,13 +88,14 @@
     register_time, created_time, updated_time, integral, level,role,address
     from pq_user
   </select>
-  <select id="selectByPhone" resultMap="BaseResultMap" >
+  <select id="selectByPhoneAndRole" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
     register_time, created_time, updated_time, integral, level,role,address
     from pq_user
     WHERE username = #{phone}
     OR phone = #{phone}
+    and role = #{role}
     order by created_time desc
     limit 1
   </select>

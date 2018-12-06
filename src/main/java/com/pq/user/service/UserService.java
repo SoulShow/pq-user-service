@@ -53,9 +53,10 @@ public interface UserService {
      * 通过手机号查询用户信息
      *
      * @param phone
+     * @param role
      * @return
      */
-    User getUserByPhone(String phone);
+    User getUserByPhone(String phone,int role);
 
     /**
      * 清除用户输入密码错误log
@@ -123,8 +124,9 @@ public interface UserService {
      * @param phone
      * @param password
      * @param repPassword
+     * @param role
      */
-    void setPassword(String userId, String phone, String password, String repPassword);
+    void setPassword(String userId, String phone, String password, String repPassword,int role);
 
     /**
      * 创建用户

@@ -68,10 +68,11 @@ public class UserController {
     @GetMapping("/captcha")
     @ResponseBody
     public UserResult<CaptchaDto> getCaptcha(@RequestParam(value = "mobile")String mobile,
-                                             @RequestParam(value = "type")String type) {
+                                             @RequestParam(value = "type")String type,
+                                             @RequestParam(value = "role")int role) {
         UserResult result = new UserResult();
         try {
-            result.setData(mobileCaptchaService.send(mobile,type));
+            result.setData(mobileCaptchaService.send(mobile,type,role));
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());
@@ -107,8 +108,8 @@ public class UserController {
     public UserResult updateUserPhone(@RequestBody UpdatePhoneDto updatePhoneDto) {
         UserResult result = new UserResult();
         try {
-            User user = userService.getUserByPhone(updatePhoneDto.getAccount());
-            User newUser = userService.getUserByPhone(updatePhoneDto.getNewPhone());
+            User user = userService.getUserByPhone(updatePhoneDto.getAccount(),updatePhoneDto.getRole());
+            User newUser = userService.getUserByPhone(updatePhoneDto.getNewPhone(),updatePhoneDto.getRole());
             if(newUser!=null){
                 UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
             }
@@ -136,7 +137,7 @@ public class UserController {
             User user = userService.getUserByUserId(passwordModifyDto.getUserId());
 
             userService.setPassword(user.getUserId(),user.getPhone(),
-                    passwordModifyDto.getOldPassword(),passwordModifyDto.getRepPassword());
+                    passwordModifyDto.getOldPassword(),passwordModifyDto.getRepPassword(),passwordModifyDto.getRole());
             sessionService.deleteUserSession(passwordModifyDto.getUserId(),passwordModifyDto.getSessionId());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());

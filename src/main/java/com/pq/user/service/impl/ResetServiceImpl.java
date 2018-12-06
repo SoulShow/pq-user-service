@@ -33,8 +33,8 @@ public class ResetServiceImpl implements ResetService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void resetPassword(String phone, String newPassword, String repeatNewPassword) {
-        User userEntity = userMapper.selectByPhone(phone);
+    public void resetPassword(String phone, String newPassword, String repeatNewPassword,int role) {
+        User userEntity = userMapper.selectByPhoneAndRole(phone,role);
         if (userEntity == null) {
             UserException.raise(UserErrors.USER_NOT_FOUND);
         }

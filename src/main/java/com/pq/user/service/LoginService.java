@@ -16,17 +16,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface LoginService {
 
-    /**
-     * 验证码登陆验证
-     *
-     * @param username
-     * @param code
-     * @param request
-     * @param requestFrom
-     * @return
-     * @throws Exception
-     */
-    UserDto authenticationByCode(String username, String code, HttpServletRequest request, int requestFrom) throws Exception;
 
     /**
      * 登陆验证
@@ -49,9 +38,10 @@ public interface LoginService {
      * 登陆尝试次数
      *
      * @param username
+     * @param role
      * @return
      */
-    Integer loginTryTimes(String username);
+    Integer loginTryTimes(String username,int role);
 
     /**
      * 获取密码错误次数
@@ -60,7 +50,7 @@ public interface LoginService {
      */
     Integer getUserPasswordErrorLogNumber(String userId);
 
-    Integer loginTryTimesRemain(String username);
+    Integer loginTryTimesRemain(String username,int role);
 
     Integer loginTryTimesRemainByUserId(String userId);
 

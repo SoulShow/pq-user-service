@@ -64,9 +64,9 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
 
 
     @Override
-    public boolean canSend(String mobile, String type) {
+    public boolean canSend(String mobile, String type,int role) {
 
-        User user = userMapper.selectByPhone(mobile);
+        User user = userMapper.selectByPhoneAndRole(mobile,role);
         if (user != null && user.getStatus() == ConstantsUser.USER_STATUS_LOCKED) {
             UserException.raise(UserErrors.USER_IS_LOCKED);
         }
@@ -109,9 +109,9 @@ public class MobileCaptchaServiceImpl implements MobileCaptchaService {
     }
 
     @Override
-    public CaptchaDto send(String mobile, String type) {
+    public CaptchaDto send(String mobile, String type,int role) {
         CaptchaDto captchaDto = null;
-        if (canSend(mobile, type)) {
+        if (canSend(mobile, type,role)) {
             try {
                 captchaDto = new CaptchaDto();
                 CaptchaType captchaType = captchaTypeMapper.selectByTypeCode(type);

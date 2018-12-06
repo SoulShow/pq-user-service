@@ -16,6 +16,7 @@ public class AuthForm implements Serializable {
     private String gtClientId;
     private HttpSession httpSession;
     private String sessionId;
+    private int role;
 
     public AuthForm() {
     }
@@ -95,5 +96,13 @@ public class AuthForm implements Serializable {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

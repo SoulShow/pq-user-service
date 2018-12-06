@@ -154,8 +154,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByPhone(String phone) {
-        return userMapper.selectByPhone(phone);
+    public User getUserByPhone(String phone,int role) {
+        return userMapper.selectByPhoneAndRole(phone,role);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
         }
 
         HashMap<String, String> paramMap = new HashMap<>();
-        paramMap.put("userName", registerRequestDto.getPhone());
+        paramMap.put("userName", registerRequestDto.getPhone()+userEntity.getRole());
         paramMap.put("passWord", registerRequestDto.getPhone());
         try {
             String result = HttpUtil.sendJson(phpUrl+"addUser",new HashMap<>(),JSON.toJSONString(paramMap));
@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService {
         if (registerRequestDto.getPhone() == null || !OtherUtil.verifyPhone(registerRequestDto.getPhone())) {
             UserException.raise(UserErrors.REGISTER_ERROR_MOBILE);
         }
-        User user = getUserByPhone(registerRequestDto.getPhone());
+        User user = getUserByPhone(registerRequestDto.getPhone(),registerRequestDto.getRole());
         if (user != null) {
             UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
         }
@@ -252,8 +252,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setPassword(String userId, String phone, String oldPassword, String repPassword) {
-        User userEntity = userMapper.selectByPhone(phone);
+    public void setPassword(String userId, String phone, String oldPassword, String repPassword,int role) {
+        User userEntity = userMapper.selectByPhoneAndRole(phone,role);
 
         if (userEntity == null) {
             UserException.raise(UserErrors.USER_NOT_FOUND);

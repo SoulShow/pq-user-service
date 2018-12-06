@@ -20,6 +20,7 @@ public class ForgetPasswordForm implements Serializable {
     private String account;
     private String newPassword;
     private String repPassword;
+    private int role;
 
     @NotBlank(message = "手机号码不能为空")
     @NotNull(message = "手机号码必须填写")
@@ -69,6 +70,14 @@ public class ForgetPasswordForm implements Serializable {
     @AssertTrue(message = "手机号码不符合格式")
     public boolean isValidMobile() {
         return OtherUtil.verifyPhone(account);
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }
 

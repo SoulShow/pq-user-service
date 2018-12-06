@@ -12,18 +12,20 @@ public interface MobileCaptchaService {
      *
      * @param mobile 手机号
      * @param type   验证码类型
+     * @param role
      * @return
      */
-    boolean canSend(String mobile, String type);
+    boolean canSend(String mobile, String type,int role);
 
     /**
      * 发送验证码
      *
      * @param mobile 手机号
      * @param type   验证码类型
+     * @param role
      * @return
      */
-    CaptchaDto send(String mobile, String type);
+    CaptchaDto send(String mobile, String type,int role);
 
 
     /**

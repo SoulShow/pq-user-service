@@ -57,7 +57,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getUserByPhone() {
-        User user = userService.getUserByPhone("18910845169");
+        User user = userService.getUserByPhone("18910845169",1);
         System.out.print("sss");
     }
 

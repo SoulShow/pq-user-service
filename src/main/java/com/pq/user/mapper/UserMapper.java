@@ -17,7 +17,7 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    User selectByPhone(@Param("phone") String phone);
+    User selectByPhoneAndRole(@Param("phone") String phone,@Param("role")int role);
 
     User selectByUserId(@Param("userId") String userId);
 

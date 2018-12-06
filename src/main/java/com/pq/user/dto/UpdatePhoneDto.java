@@ -14,6 +14,7 @@ public class UpdatePhoneDto implements Serializable {
     private String newPhone;
     private String verCode;
     private String sessionId;
+    private int role;
 
     public String getAccount() {
         return account;
@@ -45,6 +46,14 @@ public class UpdatePhoneDto implements Serializable {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }
 

@@ -1,12 +1,9 @@
 package com.pq.user.service.impl;
 
-import cn.jpush.api.utils.StringUtils;
-import com.pq.common.captcha.UserCaptchaType;
 import com.pq.common.constants.CacheKeyConstants;
 import com.pq.common.util.DateUtil;
 import com.pq.common.util.Password;
 import com.pq.common.util.StringUtil;
-import com.pq.common.util.UserIdGenerator;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
 import com.pq.user.entity.UserLogLogin;
@@ -16,7 +13,6 @@ import com.pq.user.form.AuthForm;
 import com.pq.user.mapper.UserLogLoginMapper;
 import com.pq.user.mapper.UserMapper;
 import com.pq.user.service.LoginService;
-import com.pq.user.service.MobileCaptchaService;
 import com.pq.user.service.SessionService;
 import com.pq.user.service.UserService;
 import com.pq.user.utils.ConstantsUser;
@@ -25,10 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -56,69 +49,11 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private UserLogLoginMapper userLogLoginMapper;
     @Autowired
-    private MobileCaptchaService captchaService;
-    @Autowired
     private UserMapper userMapper;
-
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public UserDto authenticationByCode(String username, String code, HttpServletRequest request, int requestFrom) throws Exception {
-//        captchaService.verify(username, UserCaptchaType.LOGIN.getCode(), code);
-
-        User user = userMapper.selectByPhone(username);
-        if (user != null) {
-            //手机登陆已注册用户
-            if (user.getStatus() == ConstantsUser.USER_STATUS_LOCKED) {
-                UserException.raise(UserErrors.USER_IS_LOCKED);
-            }
-        } else {
-            //手机登陆没有注册
-            user = new User();
-            user.setUsername(username);
-            user.setPhone(username);
-            user.setStatus(ConstantsUser.USER_STATUS_NORMAL);
-            user.setRequestFrom(requestFrom);
-            user.setRegisterTime(DateUtil.currentTime());
-            user.setCreatedTime(DateUtil.currentTime());
-            user.setUpdatedTime(DateUtil.currentTime());
-            user.setUserId(UserIdGenerator.generator());
-            userMapper.insert(user);
-        }
-
-        UserDto userDto = userService.transformUserEntityToUserDto(user);
-        // 记录session，表示登录状态
-        HttpSession session = request.getSession();
-//        session.setAttribute(ConstantsUser.SESSION_USER_ID_KEY, user.getUserId());
-
-        // 记录用户id与session id的映射
-        sessionService.addUserSession(user.getUserId(), session.getId());
-        UserLogLogin userLogLogin = new UserLogLogin();
-        userLogLogin.setUserId(user.getUserId());
-//        userLogLogin.setUserAgent(request.getHeader(USER_AGENT));
-        userLogLogin.setSessionId(session.getId());
-        userLogLogin.setLoginTime(DateUtil.currentTime());
-//        userLogLogin.setLoginIp(getRequestIP(request));
-
-        Object deviceId = request.getHeader("XDevice");
-        if (deviceId == null) {
-            userLogLogin.setIsPhone(false);
-        } else {
-            userLogLogin.setIsPhone(true);
-            userLogLogin.setDeviceId((String) deviceId);
-        }
-        Object gtClientId = request.getHeader("GTClientId");
-        if (gtClientId != null) {
-            userLogLogin.setGtClientId((String) gtClientId);
-        }
-
-        userLogLoginMapper.insert(userLogLogin);
-        return userDto;
-    }
 
     @Override
     public UserDto authentication(AuthForm authForm) throws Exception {
-        UserDto userDto = authentication(authForm.getAccount(), authForm.getPassword());
+        UserDto userDto = authentication(authForm.getAccount(), authForm.getPassword(),authForm.getRole());
         // 记录用户id与session id的映射
         sessionService.addUserSession(userDto.getUserId(), authForm.getSessionId());
         UserLogLogin userLogLogin = new UserLogLogin();
@@ -138,8 +73,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
 
-    private UserDto authentication(String username, String passwordPlain) throws Exception {
-        User userEntity = userMapper.selectByPhone(username);
+    private UserDto authentication(String username, String passwordPlain,int role) throws Exception {
+        User userEntity = userMapper.selectByPhoneAndRole(username,role);
 
         if (userEntity == null) {
             UserException.raise(UserErrors.USER_NOT_FOUND);
@@ -167,9 +102,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Integer loginTryTimes(String userName) {
+    public Integer loginTryTimes(String userName,int role) {
         Integer tryTimes = 0;
-        User userEntity = userMapper.selectByPhone(userName);
+        User userEntity = userMapper.selectByPhoneAndRole(userName,role);
         if (userEntity != null) {
             tryTimes = getUserPasswordErrorLogNumber(userEntity.getUserId());
         }
@@ -178,8 +113,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Integer loginTryTimesRemain(String username) {
-        return passwordErrorLogMaxNumber - loginTryTimes(username);
+    public Integer loginTryTimesRemain(String username,int role) {
+        return passwordErrorLogMaxNumber - loginTryTimes(username,role);
     }
 
     @Override

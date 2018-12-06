@@ -77,7 +77,8 @@ public class AuthController  {
             if(!forgetPasswordForm.isPasswordMatch()){
                 UserException.raise(UserErrors.USER_PASSWORD_MODIFY_NOT_SANME_ERROR);
             }
-            resetService.resetPassword(forgetPasswordForm.getAccount(),forgetPasswordForm.getNewPassword(),forgetPasswordForm.getRepPassword());
+            resetService.resetPassword(forgetPasswordForm.getAccount(),forgetPasswordForm.getNewPassword(),
+                    forgetPasswordForm.getRepPassword(),forgetPasswordForm.getRole());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());
@@ -90,11 +91,12 @@ public class AuthController  {
     }
     @GetMapping("/login/try")
     @ResponseBody
-    public UserResult<Integer> forgetPassword(@RequestParam(value = "mobile")String mobile) {
+    public UserResult<Integer> forgetPassword(@RequestParam(value = "mobile")String mobile,
+                                              @RequestParam(value = "role")int role) {
         UserResult result = new UserResult();
 
         try {
-            loginService.loginTryTimes(mobile);
+            loginService.loginTryTimes(mobile,role);
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

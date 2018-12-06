@@ -15,7 +15,7 @@ public interface ResetService {
      * @param newPassword
      * @param repeatNewPassword
      */
-    void resetPassword(String phone, String newPassword, String repeatNewPassword);
+    void resetPassword(String phone, String newPassword, String repeatNewPassword,int role);
 
     /**
      * 修改用户密码
