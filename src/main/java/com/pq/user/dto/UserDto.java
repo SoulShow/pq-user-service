@@ -10,7 +10,7 @@ import java.util.List;
 public class UserDto implements Serializable {
 
     private String username;
-    private String huanXinId;
+    private String huanxinId;
     private String picture;
     private String phone;
     private int role;
@@ -24,14 +24,6 @@ public class UserDto implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getHuanXinId() {
-        return huanXinId;
-    }
-
-    public void setHuanXinId(String huanXinId) {
-        this.huanXinId = huanXinId;
     }
 
     public String getPicture() {
@@ -80,5 +72,13 @@ public class UserDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getHuanxinId() {
+        return huanxinId;
+    }
+
+    public void setHuanxinId(String huanxinId) {
+        this.huanxinId = huanxinId;
     }
 }
