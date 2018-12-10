@@ -35,6 +35,8 @@ public class User implements Serializable {
 
     private String phone;
 
+    private String huanxinId;
+
     private String birthday;
 
     private Integer status;
@@ -227,5 +229,13 @@ public class User implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getHuanxinId() {
+        return huanxinId;
+    }
+
+    public void setHuanxinId(String huanxinId) {
+        this.huanxinId = huanxinId;
     }
 }

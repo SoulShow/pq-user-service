@@ -14,6 +14,7 @@
     <result column="cert_type" property="certType" jdbcType="CHAR" />
     <result column="cert_no" property="certNo" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="huanxin_id" property="huanxinId" jdbcType="VARCHAR" />
     <result column="birthday" property="birthday" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
@@ -39,7 +40,7 @@
       cert_no, phone,role,
       birthday, status, request_from, 
       lock_time, register_time, created_time, 
-      updated_time, integral, level,address
+      updated_time, integral, level,address,huanxin_id
       )
     values (#{userId,jdbcType=CHAR}, #{username,jdbcType=VARCHAR},
       #{nickname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
@@ -47,7 +48,7 @@
       #{certNo,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},#{role},
       #{birthday,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{requestFrom,jdbcType=INTEGER}, 
       #{lockTime,jdbcType=TIMESTAMP}, #{registerTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP}, #{integral,jdbcType=DECIMAL}, #{level,jdbcType=INTEGER},#{address}
+      #{updatedTime,jdbcType=TIMESTAMP}, #{integral,jdbcType=DECIMAL}, #{level,jdbcType=INTEGER},#{address},#{huanxinId}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.User" >
@@ -72,26 +73,27 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       integral = #{integral,jdbcType=DECIMAL},
-      level = #{level,jdbcType=INTEGER}
+      level = #{level,jdbcType=INTEGER},
+      huanxin_id = #{huanxinId}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
     from pq_user
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
     from pq_user
   </select>
   <select id="selectByPhoneAndRole" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
     from pq_user
     WHERE username = #{phone}
     OR phone = #{phone}
@@ -103,7 +105,7 @@
   <select id="selectByUserId" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
     from pq_user
     WHERE user_id = #{userId}
   </select>

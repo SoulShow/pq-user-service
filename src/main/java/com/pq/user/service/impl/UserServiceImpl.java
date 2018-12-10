@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = new UserDto();
         userDto.setUsername(user.getUsername());
         userDto.setPhone(user.getPhone());
-        userDto.setHuanXinId(user.getUsername());
+        userDto.setHuanXinId(user.getHuanxinId());
         userDto.setPicture(user.getAvatar());
         userDto.setRole(user.getRole());
         userDto.setAddress(user.getAddress());
@@ -161,7 +161,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public String register(RegisterRequestDto registerRequestDto) {
         checkRegisterInfo(registerRequestDto);
-
+        HashMap<String, String> paramMap = new HashMap<>();
+        paramMap.put("userName", registerRequestDto.getPhone()+registerRequestDto.getRole());
+        paramMap.put("passWord", registerRequestDto.getPhone()+registerRequestDto.getRole());
+        try {
+            String result = HttpUtil.sendJson(phpUrl+"addUser",new HashMap<>(),JSON.toJSONString(paramMap));
+            UserResult userResult = JSON.parseObject(result,UserResult.class);
+            if(userResult==null||!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())){
+                UserException.raise(UserErrors.USER_HUANXIN_REGISTER_ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            UserException.raise(UserErrors.USER_HUANXIN_REGISTER_ERROR);
+        }
         User userEntity = new User();
         Timestamp currentTime = DateUtil.currentTime();
 
@@ -175,25 +187,12 @@ public class UserServiceImpl implements UserService {
         userEntity.setUpdatedTime(currentTime);
         userEntity.setRole(registerRequestDto.getRole());
         userEntity.setRequestFrom(registerRequestDto.getRequestFrom());
+        userEntity.setHuanxinId(registerRequestDto.getPhone()+userEntity.getRole());
         try {
             userMapper.insert(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
             UserException.raise(UserErrors.REGISTER_ERROR);
-        }
-
-        HashMap<String, String> paramMap = new HashMap<>();
-        paramMap.put("userName", registerRequestDto.getPhone()+userEntity.getRole());
-        paramMap.put("passWord", registerRequestDto.getPhone());
-        try {
-            String result = HttpUtil.sendJson(phpUrl+"addUser",new HashMap<>(),JSON.toJSONString(paramMap));
-            UserResult userResult = JSON.parseObject(result,UserResult.class);
-            if(userResult==null||!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())){
-                UserException.raise(UserErrors.USER_HUANXIN_REGISTER_ERROR);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            UserException.raise(UserErrors.USER_HUANXIN_REGISTER_ERROR);
         }
         return userEntity.getUserId();
     }
