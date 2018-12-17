@@ -32,7 +32,7 @@ public class UserDynamicController {
     @ResponseBody
     public UserResult<List<UserDynamicDto>> getUserDynamic(@RequestParam(value = "agencyClassId")Long agencyClassId,
                                                            @RequestParam(value = "userId")String userId,
-                                                           @RequestParam("studentId") Long studentId,
+                                                           @RequestParam(value = "studentId",required = false) Long studentId,
                                                            @RequestParam(value = "page",required = false)Integer page,
                                                            @RequestParam(value = "size",required = false)Integer size) {
         if (page == null || page < 1) {
@@ -127,7 +127,8 @@ public class UserDynamicController {
     public UserResult deleteDynamic(@RequestBody UserDynamicDelForm dynamicDelForm) {
         UserResult result = new UserResult();
         try {
-            dynamicService.deleteDynamic(dynamicDelForm.getDynamicId(),dynamicDelForm.getUserId(),dynamicDelForm.getStudentId());
+            dynamicService.deleteDynamic(dynamicDelForm.getDynamicId(),dynamicDelForm.getUserId(),
+                    dynamicDelForm.getStudentId(),dynamicDelForm.getRole());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

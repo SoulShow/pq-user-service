@@ -63,7 +63,8 @@ public interface UserDynamicService {
      * @param id
      * @param userId
      * @param studentId
+     * @param role
      * @return
      */
-    void deleteDynamic(Long id, String userId,Long studentId);
+    void deleteDynamic(Long id, String userId,Long studentId,int role);
 }

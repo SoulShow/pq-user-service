@@ -71,8 +71,14 @@ public class UserDynamicServiceImpl implements UserDynamicService {
 
             userDynamicDto.setPraiseList(getDynamicPraiseDtoList(userDynamic));
             for(DynamicPraiseDto dynamicPraiseDto:userDynamicDto.getPraiseList()){
-                if(userId.equals(dynamicPraiseDto.getUserId())&& studentId.equals(dynamicPraiseDto.getStudentId())){
-                    userDynamicDto.setPraiseState(1);
+                if(studentId==0||studentId==null){
+                    if(userId.equals(dynamicPraiseDto.getUserId())){
+                        userDynamicDto.setPraiseState(1);
+                    }
+                }else {
+                    if(userId.equals(dynamicPraiseDto.getUserId())&& studentId.equals(dynamicPraiseDto.getStudentId())){
+                        userDynamicDto.setPraiseState(1);
+                    }
                 }
             }
 
@@ -216,14 +222,20 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         return commentDto;
     }
     @Override
-    public void deleteDynamic(Long id, String userId,Long studentId){
+    public void deleteDynamic(Long id, String userId,Long studentId,int role){
         UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(id);
         if(userDynamic==null){
             UserException.raise(UserErrors.USER_DYNAMIC_NOT_EXIST_ERROR);
         }
-        if(!userId.equals(userDynamic.getUserId())||!studentId.equals(userDynamic.getStudentId())){
+        if(!userId.equals(userDynamic.getUserId())){
             UserException.raise(UserErrors.USER_DYNAMIC_CAN_NOT_DELETE_ERROR);
         }
+        if(role==CommonConstants.PQ_LOGIN_ROLE_PARENT){
+            if(!studentId.equals(userDynamic.getStudentId())){
+                UserException.raise(UserErrors.USER_DYNAMIC_CAN_NOT_DELETE_ERROR);
+            }
+        }
+
         userDynamic.setState(CommonConstants.PQ_STATE_UN_VALID);
         userDynamic.setUpdatedTime(DateUtil.currentTime());
         userDynamicMapper.updateByPrimaryKey(userDynamic);

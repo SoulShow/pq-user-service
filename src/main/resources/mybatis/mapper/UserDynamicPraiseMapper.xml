@@ -61,6 +61,8 @@
     where dynamic_id = #{dynamicId}
     and state = 1
     and user_id = #{userId}
+    <if test="studentId !=null and studentId != 0">
     and student_id = #{studentId}
+    </if>
   </select>
 </mapper>
