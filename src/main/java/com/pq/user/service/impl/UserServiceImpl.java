@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
         List<AgencyUserDto> list = result.getData();
         UserDto userDto = new UserDto();
         userDto.setUsername(user.getUsername());
+        userDto.setName(user.getName());
         userDto.setPhone(user.getPhone());
         userDto.setHuanxinId(user.getHuanxinId());
         userDto.setPicture(user.getAvatar());
