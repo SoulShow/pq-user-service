@@ -71,7 +71,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
 
             userDynamicDto.setPraiseList(getDynamicPraiseDtoList(userDynamic));
             for(DynamicPraiseDto dynamicPraiseDto:userDynamicDto.getPraiseList()){
-                if(studentId==0||studentId==null){
+                if(studentId==null || studentId==0){
                     if(userId.equals(dynamicPraiseDto.getUserId())){
                         userDynamicDto.setPraiseState(1);
                     }
