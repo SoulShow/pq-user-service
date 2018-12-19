@@ -95,8 +95,8 @@
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
     register_time, created_time, updated_time, integral, level,role,address,huanxin_id
     from pq_user
-    WHERE username = #{phone}
-    OR phone = #{phone}
+    WHERE (username = #{phone}
+    OR phone = #{phone})
     and role = #{role}
     order by created_time desc
     limit 1
