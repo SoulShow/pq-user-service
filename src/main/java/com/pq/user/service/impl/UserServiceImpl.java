@@ -190,7 +190,8 @@ public class UserServiceImpl implements UserService {
         userEntity.setRequestFrom(registerRequestDto.getRequestFrom());
         userEntity.setName(registerRequestDto.getName());
         userEntity.setHuanxinId(registerRequestDto.getPhone()+userEntity.getRole());
-        userEntity.setReviewStatus(ConstantsUser.USER_REVIEW_STATUS_WAITING);
+        //TODO 测试传USER_REVIEW_STATUS_SUCCESS，需要审核传  USER_REVIEW_STATUS_WAITING
+        userEntity.setReviewStatus(ConstantsUser.USER_REVIEW_STATUS_SUCCESS);
         try {
             userMapper.insert(userEntity);
         } catch (Exception e) {
