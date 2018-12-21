@@ -76,13 +76,15 @@ public class LoginServiceImpl implements LoginService {
 
     private UserDto authentication(String username, String passwordPlain,int role) throws Exception {
         User userEntity = userMapper.selectByPhoneAndRole(username,role);
+
+        if (userEntity == null) {
+            UserException.raise(UserErrors.USER_NOT_FOUND);
+        }
+
         if(role == com.pq.common.constants.CommonConstants.PQ_LOGIN_ROLE_TEACHER){
             if(userEntity.getReviewStatus()==ConstantsUser.USER_REVIEW_STATUS_WAITING){
                 UserException.raise(UserErrors.USER_REVIEWED_WAITING_ERROR);
             }
-        }
-        if (userEntity == null) {
-            UserException.raise(UserErrors.USER_NOT_FOUND);
         }
 
         if (userEntity.getStatus() == ConstantsUser.USER_STATUS_LOCKED) {
