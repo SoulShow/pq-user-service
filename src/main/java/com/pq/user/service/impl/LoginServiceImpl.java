@@ -1,5 +1,6 @@
 package com.pq.user.service.impl;
 
+import com.netflix.discovery.CommonConstants;
 import com.pq.common.constants.CacheKeyConstants;
 import com.pq.common.util.DateUtil;
 import com.pq.common.util.Password;
@@ -75,7 +76,11 @@ public class LoginServiceImpl implements LoginService {
 
     private UserDto authentication(String username, String passwordPlain,int role) throws Exception {
         User userEntity = userMapper.selectByPhoneAndRole(username,role);
-
+        if(role == com.pq.common.constants.CommonConstants.PQ_LOGIN_ROLE_TEACHER){
+            if(userEntity.getReviewStatus()==ConstantsUser.USER_REVIEW_STATUS_WAITING){
+                UserException.raise(UserErrors.USER_REVIEWED_WAITING_ERROR);
+            }
+        }
         if (userEntity == null) {
             UserException.raise(UserErrors.USER_NOT_FOUND);
         }

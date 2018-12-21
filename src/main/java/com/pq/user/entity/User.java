@@ -51,6 +51,10 @@ public class User implements Serializable {
 
     private Timestamp updatedTime;
 
+    private Timestamp reviewTime;
+
+    private int reviewStatus;
+
     private BigDecimal integral;
 
     private Integer level;
@@ -237,5 +241,21 @@ public class User implements Serializable {
 
     public void setHuanxinId(String huanxinId) {
         this.huanxinId = huanxinId;
+    }
+
+    public Timestamp getReviewTime() {
+        return reviewTime;
+    }
+
+    public void setReviewTime(Timestamp reviewTime) {
+        this.reviewTime = reviewTime;
+    }
+
+    public int getReviewStatus() {
+        return reviewStatus;
+    }
+
+    public void setReviewStatus(int reviewStatus) {
+        this.reviewStatus = reviewStatus;
     }
 }

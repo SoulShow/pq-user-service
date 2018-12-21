@@ -50,4 +50,7 @@ public class UserErrors extends CommonErrors {
 
     public final static ErrorCode USER_HUANXIN_REGISTER_ERROR = new UserErrorCode("1011", "用户环信注册失败");
 
+    public final static ErrorCode USER_REVIEWED_WAITING_ERROR = new UserErrorCode("1012", "用户审核中");
+
+
 }

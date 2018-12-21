@@ -30,4 +30,11 @@ public class ConstantsUser {
     public static final int USER_DYNAMIC_IMG_TYPE_IMG = 1;
     public static final int USER_DYNAMIC_IMG_TYPE_MOVIE = 2;
 
+    /**
+     * 审核状态 0-审核中  1-通过  2-驳回
+     */
+    public static final int USER_REVIEW_STATUS_WAITING = 0;
+    public static final int USER_REVIEW_STATUS_SUCCESS = 1;
+    public static final int USER_REVIEW_STATUS_FAIL = 2;
+
 }

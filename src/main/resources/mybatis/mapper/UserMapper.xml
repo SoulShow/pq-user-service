@@ -25,6 +25,9 @@
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
     <result column="integral" property="integral" jdbcType="DECIMAL" />
     <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="review_time" property="reviewTime" jdbcType="TIMESTAMP" />
+    <result column="review_status" property="reviewStatus" jdbcType="INTEGER" />
+
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from pq_user
@@ -40,7 +43,8 @@
       cert_no, phone,role,
       birthday, status, request_from, 
       lock_time, register_time, created_time, 
-      updated_time, integral, level,address,huanxin_id
+      updated_time, integral, level,address,huanxin_id,
+    review_time,review_status
       )
     values (#{userId,jdbcType=CHAR}, #{username,jdbcType=VARCHAR},
       #{nickname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
@@ -48,7 +52,8 @@
       #{certNo,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},#{role},
       #{birthday,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{requestFrom,jdbcType=INTEGER}, 
       #{lockTime,jdbcType=TIMESTAMP}, #{registerTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP}, #{integral,jdbcType=DECIMAL}, #{level,jdbcType=INTEGER},#{address},#{huanxinId}
+      #{updatedTime,jdbcType=TIMESTAMP}, #{integral,jdbcType=DECIMAL}, #{level,jdbcType=INTEGER},#{address},#{huanxinId},
+    #{reviewTime},#{reviewStatus}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.User" >
@@ -74,30 +79,36 @@
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       integral = #{integral,jdbcType=DECIMAL},
       level = #{level,jdbcType=INTEGER},
-      huanxin_id = #{huanxinId}
+      huanxin_id = #{huanxinId},
+      review_time  = #{reviewTime},
+      review_status = #{reviewStatus}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
+    review_time,review_status
     from pq_user
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
+    review_time,review_status
     from pq_user
   </select>
   <select id="selectByPhoneAndRole" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
+    review_time,review_status
     from pq_user
     WHERE (username = #{phone}
     OR phone = #{phone})
     and role = #{role}
+    and review_status !=2
     order by created_time desc
     limit 1
   </select>
@@ -105,8 +116,10 @@
   <select id="selectByUserId" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
-    register_time, created_time, updated_time, integral, level,role,address,huanxin_id
+    register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
+    review_time,review_status
     from pq_user
     WHERE user_id = #{userId}
+    and and review_status !=2
   </select>
 </mapper>
