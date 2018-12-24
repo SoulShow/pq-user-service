@@ -7,6 +7,7 @@ import com.pq.user.entity.User;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.form.FeedbackForm;
+import com.pq.user.form.NameModifyForm;
 import com.pq.user.service.MobileCaptchaService;
 import com.pq.user.service.SessionService;
 import com.pq.user.service.UserService;
@@ -156,6 +157,25 @@ public class UserController {
         try {
             User user = userService.getUserByUserId(userModifyDto.getUserId());
             user.setAvatar(userModifyDto.getAvatar());
+            userService.updateUserInfo(user);
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+    @PostMapping("/update/name")
+    @ResponseBody
+    public UserResult updateUserName(@RequestBody NameModifyForm nameModifyForm) {
+        UserResult result = new UserResult();
+        try {
+            User user = userService.getUserByUserId(nameModifyForm.getUserId());
+            user.setName(nameModifyForm.getName());
             userService.updateUserInfo(user);
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
