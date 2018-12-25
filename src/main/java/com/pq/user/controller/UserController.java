@@ -114,7 +114,6 @@ public class UserController {
             if(newUser!=null){
                 UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
             }
-            mobileCaptchaService.verify(updatePhoneDto.getNewPhone(),UserCaptchaType.COMMIT_PHONE.getIndex(),updatePhoneDto.getVerCode());
             user.setPhone(updatePhoneDto.getNewPhone());
             user.setUsername(updatePhoneDto.getNewPhone());
             userService.updateUserInfo(user);

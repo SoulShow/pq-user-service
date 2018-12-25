@@ -110,7 +110,6 @@
     and role = #{role}
     and review_status !=2
     order by created_time desc
-    limit 1
   </select>
 
   <select id="selectByUserId" resultMap="BaseResultMap" >
