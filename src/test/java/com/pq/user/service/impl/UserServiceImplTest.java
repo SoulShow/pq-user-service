@@ -30,7 +30,7 @@ public class UserServiceImplTest {
     private Password passwordUtil;
     @Test
     public void getUserDtoByUserId() {
-       String password =  passwordUtil.encode("123456");
+       Boolean password =  passwordUtil.checkPassword("123456","pbkdf2_sha256$10000$FLSH1D6BaIQ=$Pc5s9+0Ooc5nHf1MMH2hQqhhg1qYFdOopkCmBEI8/ec=");
        System.out.print(password);
     }
 
