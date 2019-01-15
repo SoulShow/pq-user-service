@@ -256,6 +256,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void setPassword(String userId, String phone, String oldPassword, String repPassword,int role) {
+
         User userEntity = userMapper.selectByPhoneAndRole(phone,role);
 
         if (userEntity == null) {
@@ -264,7 +265,9 @@ public class UserServiceImpl implements UserService {
         if (!userEntity.getUserId().equals(userId)) {
             UserException.raise(UserErrors.USER_INFO_NOT_MATCH_ERROR);
         }
-
+        if(!passwordUtil.checkPassword(oldPassword, userEntity.getPassword())){
+            UserException.raise(UserErrors.USER_OLD_PASSWORD_ERROR);
+        }
         User originUserEntity = new User();
         BeanUtils.copyProperties(userEntity, originUserEntity);
 

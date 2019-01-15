@@ -1,6 +1,7 @@
 package com.pq.user.service.impl;
 
 import com.google.gson.Gson;
+import com.pq.common.util.Password;
 import com.pq.user.entity.MobileCaptcha;
 import com.pq.user.entity.User;
 import com.pq.user.mapper.MobileCaptchaMapper;
@@ -25,14 +26,12 @@ public class UserServiceImplTest {
     private MobileCaptchaService mobileCaptchaService;
     @Autowired
     private MobileCaptchaMapper mobileCaptchaMapper;
+    @Autowired
+    private Password passwordUtil;
     @Test
     public void getUserDtoByUserId() {
-        List<String> list = new ArrayList<>();
-        list.add("选项1");
-        list.add("选项2");
-        Gson gson = new Gson();
-        String ss = gson.toJson(list);
-        System.out.print("");
+       String password =  passwordUtil.encode("123456");
+       System.out.print(password);
     }
 
     @Test
