@@ -48,7 +48,7 @@ captcha:
     maxFailedCount: 100
     maxSendCountOfDay: 100
     isBlockSendSMS: false
-    captchaTimeOut: 120000
+    captchaTimeOut: 300000
     sendCaptchaIntervalTime: 60000
     coolDown: 60
 
