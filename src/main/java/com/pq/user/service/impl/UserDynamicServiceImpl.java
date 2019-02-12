@@ -52,7 +52,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             userDynamicDto.setId(userDynamic.getId());
             userDynamicDto.setUserId(userDynamic.getUserId());
             userDynamicDto.setName(userDynamic.getName());
-            userDynamicDto.setAvatar(userMapper.selectByUserId(userId).getAvatar());
+            userDynamicDto.setAvatar(userMapper.selectByUserId(userDynamic.getUserId()).getAvatar());
             userDynamicDto.setContent(userDynamic.getContent());
             userDynamicDto.setPraiseCount(userDynamic.getPraiseCount());
             userDynamicDto.setCommentCount(userDynamic.getCommentCount());
