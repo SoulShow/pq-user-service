@@ -164,6 +164,9 @@ public class UserDynamicServiceImpl implements UserDynamicService {
 
 
         for(UserDto agencyUser: result.getData()){
+            if(agencyUser.getUserId().equals(userDynamicForm.getUserId())){
+                continue;
+            }
             User user = userMapper.selectByUserId(agencyUser.getUserId());
 
             HashMap<String, Object> paramMap = new HashMap<>();
