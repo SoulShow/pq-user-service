@@ -37,4 +37,6 @@ public class ConstantsUser {
     public static final int USER_REVIEW_STATUS_SUCCESS = 1;
     public static final int USER_REVIEW_STATUS_FAIL = 2;
 
+    public static final int PUSH_TEMPLATE_ID_NOTICE_9 = 9;
+
 }

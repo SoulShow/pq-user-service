@@ -2,6 +2,7 @@ package com.pq.user.feign;
 
 
 import com.pq.user.dto.AgencyUserDto;
+import com.pq.user.dto.UserDto;
 import com.pq.user.utils.UserResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +32,13 @@ public interface AgencyFeign {
      */
     @RequestMapping(value = "/agency/user/classId", method = RequestMethod.GET)
     UserResult<List<Long>> getAgencyUserClassId(@RequestParam("userId") String userId);
+
+    /**
+     * 班级全部用户
+     * @param classId
+     * @return
+     */
+    @RequestMapping(value = "/agency/user/class/users", method = RequestMethod.GET)
+    UserResult<List<UserDto>> getAllAgencyClassUser(@RequestParam("classId") Long classId);
 
 }

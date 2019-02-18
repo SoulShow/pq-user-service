@@ -1,15 +1,17 @@
 package com.pq.user.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.pq.common.constants.CommonConstants;
+import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
+import com.pq.common.util.HttpUtil;
 import com.pq.common.util.StringUtil;
 import com.pq.user.dto.*;
-import com.pq.user.entity.UserDynamic;
-import com.pq.user.entity.UserDynamicComment;
-import com.pq.user.entity.UserDynamicImg;
-import com.pq.user.entity.UserDynamicPraise;
+import com.pq.user.entity.*;
+import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
+import com.pq.user.feign.AgencyFeign;
 import com.pq.user.form.CancelPraiseDynamicForm;
 import com.pq.user.form.PraiseDynamicForm;
 import com.pq.user.form.UserDynamicCommentForm;
@@ -17,12 +19,15 @@ import com.pq.user.form.UserDynamicForm;
 import com.pq.user.mapper.*;
 import com.pq.user.service.UserDynamicService;
 import com.pq.user.utils.ConstantsUser;
+import com.pq.user.utils.UserResult;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,6 +45,11 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     private UserDynamicCommentMapper userDynamicCommentMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private AgencyFeign agencyFeign;
+
+    @Value("${php.url}")
+    private String phpUrl;
 
     @Override
     public List<UserDynamicDto> getUserDynamicList(Long agencyClassId,Long studentId,String userId, int offset, int size){
@@ -145,6 +155,36 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         if(!StringUtil.isEmpty(userDynamicForm.getMovieUrl())){
             createImg(userDynamicForm.getMovieUrl(),userDynamic.getId(),ConstantsUser.USER_DYNAMIC_IMG_TYPE_MOVIE);
         }
+
+        UserResult<List<UserDto>> result = agencyFeign.getAllAgencyClassUser(userDynamicForm.getAgencyClassId());
+        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+            throw new UserException(new UserErrorCode(result.getStatus(),result.getMessage()));
+        }
+        User fromUser = userMapper.selectByUserId(userDynamicForm.getUserId());
+
+
+        for(UserDto agencyUser: result.getData()){
+            User user = userMapper.selectByUserId(agencyUser.getUserId());
+
+            HashMap<String, Object> paramMap = new HashMap<>();
+
+            paramMap.put("parameterId", ConstantsUser.PUSH_TEMPLATE_ID_NOTICE_9);
+            paramMap.put("user", user.getHuanxinId());
+            paramMap.put("form", fromUser.getHuanxinId());
+            paramMap.put("userName", userDynamicForm.getName());
+
+            String huanxResult = null;
+            try {
+                huanxResult = HttpUtil.sendJson(phpUrl+"push",new HashMap<>(),JSON.toJSONString(paramMap));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            UserResult userResult = JSON.parseObject(huanxResult,UserResult.class);
+            if(userResult==null||!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())){
+                UserException.raise(UserErrors.USER_DYNAMIC_NOTICE_PUSH_ERROR);
+            }
+        }
+
     }
     private void createImg(String img,Long id,int type){
         UserDynamicImg userDynamicImg = new UserDynamicImg();

@@ -54,4 +54,7 @@ public class UserErrors extends CommonErrors {
 
     public final static ErrorCode USER_OLD_PASSWORD_ERROR = new UserErrorCode("0013", "用户原密码错误");
 
+    public final static ErrorCode USER_DYNAMIC_NOTICE_PUSH_ERROR = new UserErrorCode("0014", "新建动态推送错误");
+
+
 }
