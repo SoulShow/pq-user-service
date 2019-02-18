@@ -2,6 +2,7 @@ package com.pq.user.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.pq.common.constants.CacheKeyConstants;
+import com.pq.common.constants.CommonConstants;
 import com.pq.common.constants.ParentRelationTypeEnum;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.*;
@@ -192,6 +193,9 @@ public class UserServiceImpl implements UserService {
         userEntity.setHuanxinId(registerRequestDto.getPhone()+userEntity.getRole());
         //TODO 测试传USER_REVIEW_STATUS_SUCCESS，需要审核传  USER_REVIEW_STATUS_WAITING
         userEntity.setReviewStatus(ConstantsUser.USER_REVIEW_STATUS_SUCCESS);
+        if(userEntity.getRole()==CommonConstants.PQ_LOGIN_ROLE_TEACHER){
+            userEntity.setReviewStatus(ConstantsUser.USER_REVIEW_STATUS_WAITING);
+        }
         try {
             userMapper.insert(userEntity);
         } catch (Exception e) {
