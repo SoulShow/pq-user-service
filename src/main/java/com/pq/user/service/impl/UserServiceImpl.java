@@ -214,7 +214,18 @@ public class UserServiceImpl implements UserService {
         }
         User user = getUserByPhone(registerRequestDto.getPhone(),registerRequestDto.getRole());
         if (user != null) {
-            UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
+            //待审核
+            if(user.getReviewStatus()==0){
+                UserException.raise(UserErrors.USER_WAIT_REVIEW);
+            }
+            //驳回
+            if(user.getReviewStatus()==2){
+                UserException.raise(UserErrors.USER_STOP_REVIEW);
+            }
+            //已通过
+            if(user.getReviewStatus()==1){
+                UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
+            }
         }
     }
 

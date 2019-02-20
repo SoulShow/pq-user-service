@@ -56,5 +56,8 @@ public class UserErrors extends CommonErrors {
 
     public final static ErrorCode USER_DYNAMIC_NOTICE_PUSH_ERROR = new UserErrorCode("0014", "新建动态推送错误");
 
+    public final static ErrorCode USER_WAIT_REVIEW = new UserErrorCode("0015", "已提交至后台审核，请稍后尝试登录");
+
+    public final static ErrorCode USER_STOP_REVIEW = new UserErrorCode("0016", "审核未通过，请重新申请");
 
 }
