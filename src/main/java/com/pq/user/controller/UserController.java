@@ -6,6 +6,7 @@ import com.pq.user.dto.*;
 import com.pq.user.entity.User;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
+import com.pq.user.form.AuroraPushIdForm;
 import com.pq.user.form.FeedbackForm;
 import com.pq.user.form.NameModifyForm;
 import com.pq.user.service.MobileCaptchaService;
@@ -222,6 +223,23 @@ public class UserController {
             result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
         }
         return result;
+    }
+    @PostMapping(value = "/user/aurora/pushId")
+    @ResponseBody
+    public UserResult updateAuroraPushId(AuroraPushIdForm auroraPushIdForm){
+        UserResult result = new UserResult();
+        try {
+            userService.updateAuroraPushId(auroraPushIdForm);
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+
     }
 
 }

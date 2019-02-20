@@ -59,6 +59,8 @@ public class User implements Serializable {
 
     private Integer level;
 
+    private String auroraPushId;
+
     public Long getId() {
         return id;
     }
@@ -257,5 +259,13 @@ public class User implements Serializable {
 
     public void setReviewStatus(int reviewStatus) {
         this.reviewStatus = reviewStatus;
+    }
+
+    public String getAuroraPushId() {
+        return auroraPushId;
+    }
+
+    public void setAuroraPushId(String auroraPushId) {
+        this.auroraPushId = auroraPushId;
     }
 }

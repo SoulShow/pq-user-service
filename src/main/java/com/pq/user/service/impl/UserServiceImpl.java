@@ -18,6 +18,7 @@ import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.feign.AgencyFeign;
+import com.pq.user.form.AuroraPushIdForm;
 import com.pq.user.mapper.UserFeedBackMapper;
 import com.pq.user.mapper.UserLogLoginMapper;
 import com.pq.user.mapper.UserLogModifyMapper;
@@ -307,6 +308,18 @@ public class UserServiceImpl implements UserService {
         userFeedBack.setUpdatedTime(DateUtil.currentTime());
         userFeedBackMapper.insert(userFeedBack);
     }
+
+    @Override
+    public void updateAuroraPushId(AuroraPushIdForm auroraPushIdForm){
+        User user = userMapper.selectByUserId(auroraPushIdForm.getUserId());
+        if(user==null){
+            return;
+        }
+        user.setAuroraPushId(auroraPushIdForm.getAuroraPushId());
+        user.setUpdatedTime(DateUtil.currentTime());
+        userMapper.updateByPrimaryKey(user);
+    }
+
 
 
 

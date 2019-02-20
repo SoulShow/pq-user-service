@@ -6,6 +6,7 @@ import com.pq.user.dto.RegisterRequestDto;
 import com.pq.user.dto.UserDto;
 import com.pq.user.entity.User;
 import com.pq.user.entity.UserLogLogin;
+import com.pq.user.form.AuroraPushIdForm;
 import com.pq.user.form.FeedbackForm;
 
 import java.util.List;
@@ -142,5 +143,11 @@ public interface UserService {
      * @param content
      */
     void feedback(String userId ,String content);
+
+    /**
+     * 更新用户极光id
+     * @param auroraPushIdForm
+     */
+    void updateAuroraPushId(AuroraPushIdForm auroraPushIdForm);
 
 }
