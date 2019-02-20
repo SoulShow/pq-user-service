@@ -109,6 +109,7 @@
     OR phone = #{phone})
     and role = #{role}
     order by created_time desc
+    limit 1
   </select>
 
   <select id="selectByUserId" resultMap="BaseResultMap" >
