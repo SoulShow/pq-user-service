@@ -11,6 +11,7 @@ import com.pq.user.form.NameModifyForm;
 import com.pq.user.service.MobileCaptchaService;
 import com.pq.user.service.SessionService;
 import com.pq.user.service.UserService;
+import com.pq.user.utils.ConstantsUser;
 import com.pq.user.utils.UserResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -111,7 +112,7 @@ public class UserController {
         try {
             User user = userService.getUserByPhone(updatePhoneDto.getAccount(),updatePhoneDto.getRole());
             User newUser = userService.getUserByPhone(updatePhoneDto.getNewPhone(),updatePhoneDto.getRole());
-            if(newUser!=null){
+            if(newUser!=null&& newUser.getReviewStatus()!=ConstantsUser.USER_REVIEW_STATUS_FAIL){
                 UserException.raise(UserErrors.USER_PHONE_IS_EXITS);
             }
             user.setPhone(updatePhoneDto.getNewPhone());

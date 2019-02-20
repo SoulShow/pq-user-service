@@ -162,6 +162,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String register(RegisterRequestDto registerRequestDto) {
+        LOGGER.info("用户注册数据注册开始*********");
+
         checkRegisterInfo(registerRequestDto);
         HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("userName", registerRequestDto.getPhone()+registerRequestDto.getRole());
@@ -176,6 +178,7 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             UserException.raise(UserErrors.USER_HUANXIN_REGISTER_ERROR);
         }
+        LOGGER.info("用户注册数据*********");
         User userEntity = new User();
         Timestamp currentTime = DateUtil.currentTime();
 
@@ -198,6 +201,8 @@ public class UserServiceImpl implements UserService {
         }
         try {
             userMapper.insert(userEntity);
+            LOGGER.info("用户数据插入库************");
+
         } catch (Exception e) {
             e.printStackTrace();
             UserException.raise(UserErrors.REGISTER_ERROR);
@@ -217,10 +222,6 @@ public class UserServiceImpl implements UserService {
             //待审核
             if(user.getReviewStatus()==0){
                 UserException.raise(UserErrors.USER_WAIT_REVIEW);
-            }
-            //驳回
-            if(user.getReviewStatus()==2){
-                UserException.raise(UserErrors.USER_STOP_REVIEW);
             }
             //已通过
             if(user.getReviewStatus()==1){
