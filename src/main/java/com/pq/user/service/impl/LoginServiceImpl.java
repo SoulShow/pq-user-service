@@ -83,7 +83,10 @@ public class LoginServiceImpl implements LoginService {
 
         if(role == com.pq.common.constants.CommonConstants.PQ_LOGIN_ROLE_TEACHER){
             if(userEntity.getReviewStatus()==ConstantsUser.USER_REVIEW_STATUS_WAITING){
-                UserException.raise(UserErrors.USER_REVIEWED_WAITING_ERROR);
+                UserException.raise(UserErrors.USER_WAIT_REVIEW);
+            }
+            if(userEntity.getReviewStatus()==ConstantsUser.USER_REVIEW_STATUS_FAIL){
+                UserException.raise(UserErrors.USER_STOP_REVIEW);
             }
         }
 
