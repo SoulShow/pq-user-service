@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.session.SessionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,10 +38,18 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void deleteUserSession(String userId) {
         // 删除映射
-//        redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
+        Set<String> sessionIds = getSessionIdsByUserId(userId);
 
-        String sessionId = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
-        deleteUserSession(userId,sessionId);
+        if (sessionIds != null) {
+            for (String sessionId : sessionIds) {
+                sessionRepository.delete(sessionId);
+            }
+        }
+        redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
 
+    }
+    @Override
+    public Set<String> getSessionIdsByUserId(String userId) {
+        return redisTemplate.opsForSet().members(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
     }
 }

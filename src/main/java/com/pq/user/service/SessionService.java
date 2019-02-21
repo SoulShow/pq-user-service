@@ -1,6 +1,8 @@
 package com.pq.user.service;
 
 
+import java.util.Set;
+
 /**
  * session相关操作
  */
@@ -29,5 +31,12 @@ public interface SessionService {
      * @param userId
      */
     void deleteUserSession(String userId);
+
+    /**
+     * 获取用户所以seesionId
+     * @param userId
+     * @return
+     */
+     Set<String> getSessionIdsByUserId(String userId);
 
 }
