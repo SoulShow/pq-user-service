@@ -311,10 +311,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateAuroraPushId(AuroraPushIdForm auroraPushIdForm){
+        LOGGER.info("更新极光id********userId"+auroraPushIdForm.getUserId());
+        LOGGER.info("更新极光id********极光id"+auroraPushIdForm.getAuroraPushId());
+
         User user = userMapper.selectByUserId(auroraPushIdForm.getUserId());
         if(user==null){
             return;
         }
+        LOGGER.info("***************"+auroraPushIdForm.getUserId());
+        LOGGER.info("************极光id"+auroraPushIdForm.getAuroraPushId());
+
         user.setAuroraPushId(auroraPushIdForm.getAuroraPushId());
         user.setUpdatedTime(DateUtil.currentTime());
         userMapper.updateByPrimaryKey(user);
