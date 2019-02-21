@@ -224,7 +224,7 @@ public class UserController {
         }
         return result;
     }
-    @PostMapping(value = "/user/aurora/pushId")
+    @PostMapping(value = "/aurora/pushId")
     @ResponseBody
     public UserResult updateAuroraPushId(AuroraPushIdForm auroraPushIdForm){
         UserResult result = new UserResult();
