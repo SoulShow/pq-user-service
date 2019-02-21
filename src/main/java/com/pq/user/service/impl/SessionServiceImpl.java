@@ -42,16 +42,16 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void deleteUserSession(String userId) {
         // 删除映射
-        Set<String> sessionIds = getSessionIdsByUserId(userId);
-
-        if (sessionIds != null) {
-            for (String sessionId : sessionIds) {
-                sessionRepository.delete(sessionId);
-            }
-        }
-        String token = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
-        logger.info("1111111*********"+token);
-        logger.info("11111111111111*********"+userId);
+//        Set<String> sessionIds = getSessionIdsByUserId(userId);
+//
+//        if (sessionIds != null) {
+//            for (String sessionId : sessionIds) {
+//                sessionRepository.delete(sessionId);
+//            }
+//        }
+//        String token = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
+//        logger.info("1111111*********"+token);
+//        logger.info("11111111111111*********"+userId);
 
         redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
 
