@@ -60,4 +60,6 @@ public class UserErrors extends CommonErrors {
 
     public final static ErrorCode USER_STOP_REVIEW = new UserErrorCode("0016", "审核未通过，请重新申请");
 
+    public final static ErrorCode USER_OLD_FIRST_LOGIN_TIPS = new UserErrorCode("0017", "重置密码提示");
+
 }

@@ -61,6 +61,8 @@ public class User implements Serializable {
 
     private String auroraPushId;
 
+    private int isOld;
+
     public Long getId() {
         return id;
     }
@@ -267,5 +269,13 @@ public class User implements Serializable {
 
     public void setAuroraPushId(String auroraPushId) {
         this.auroraPushId = auroraPushId;
+    }
+
+    public int getIsOld() {
+        return isOld;
+    }
+
+    public void setIsOld(int isOld) {
+        this.isOld = isOld;
     }
 }

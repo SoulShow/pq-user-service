@@ -80,6 +80,10 @@ public class LoginServiceImpl implements LoginService {
         if (userEntity == null) {
             UserException.raise(UserErrors.USER_NOT_FOUND);
         }
+        UserLogLogin logLogin = userLogLoginMapper.selectLastUserLoginLog(userEntity.getUserId());
+        if(userEntity.getIsOld()==1&&logLogin==null){
+            UserException.raise(UserErrors.USER_OLD_FIRST_LOGIN_TIPS);
+        }
 
         if(role == com.pq.common.constants.CommonConstants.PQ_LOGIN_ROLE_TEACHER){
             if(userEntity.getReviewStatus()==ConstantsUser.USER_REVIEW_STATUS_WAITING){

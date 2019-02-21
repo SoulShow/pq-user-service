@@ -128,12 +128,12 @@ public class AuthController  {
         return result;
     }
 
-    @PostMapping("/admin/logout")
+    @GetMapping("/admin/logout")
     @ResponseBody
-    public UserResult adminLogoutUser(@RequestBody UserDto userDto) {
+    public UserResult adminLogoutUser(@RequestParam("userId")String userId) {
         UserResult result = new UserResult();
         try {
-            sessionService.deleteUserSession(userDto.getUserId());
+            sessionService.deleteUserSession(userId);
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

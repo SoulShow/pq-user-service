@@ -28,6 +28,8 @@
     <result column="review_time" property="reviewTime" jdbcType="TIMESTAMP" />
     <result column="review_status" property="reviewStatus" jdbcType="INTEGER" />
     <result column="aurora_push_id" property="auroraPushId" jdbcType="VARCHAR" />
+    <result column="is_old" property="isOld" jdbcType="INTEGER" />
+
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from pq_user
@@ -44,7 +46,7 @@
       birthday, status, request_from, 
       lock_time, register_time, created_time, 
       updated_time, integral, level,address,huanxin_id,
-    review_time,review_status,aurora_push_id
+    review_time,review_status,aurora_push_id,is_old
       )
     values (#{userId,jdbcType=CHAR}, #{username,jdbcType=VARCHAR},
       #{nickname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
@@ -53,7 +55,7 @@
       #{birthday,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{requestFrom,jdbcType=INTEGER}, 
       #{lockTime,jdbcType=TIMESTAMP}, #{registerTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{updatedTime,jdbcType=TIMESTAMP}, #{integral,jdbcType=DECIMAL}, #{level,jdbcType=INTEGER},#{address},#{huanxinId},
-    #{reviewTime},#{reviewStatus},#{auroraPushId}
+    #{reviewTime},#{reviewStatus},#{auroraPushId},0
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.User" >
@@ -82,14 +84,15 @@
       huanxin_id = #{huanxinId},
       review_time  = #{reviewTime},
       review_status = #{reviewStatus},
-      aurora_push_id = #{auroraPushId}
+      aurora_push_id = #{auroraPushId},
+      is_old = 0
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
     register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
-    review_time,review_status,aurora_push_id
+    review_time,review_status,aurora_push_id,is_old
     from pq_user
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -97,14 +100,14 @@
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
     register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
-    review_time,review_status,aurora_push_id
+    review_time,review_status,aurora_push_id,is_old
     from pq_user
   </select>
   <select id="selectByPhoneAndRole" resultMap="BaseResultMap" >
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
     register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
-    review_time,review_status,aurora_push_id
+    review_time,review_status,aurora_push_id,is_old
     from pq_user
     WHERE (username = #{phone}
     OR phone = #{phone})
@@ -117,7 +120,7 @@
     select id, user_id, username, nickname, password, name, gender, avatar,
     cert_type, cert_no, phone, birthday, status, request_from, lock_time,
     register_time, created_time, updated_time, integral, level,role,address,huanxin_id,
-    review_time,review_status,aurora_push_id
+    review_time,review_status,aurora_push_id,is_old
     from pq_user
     WHERE user_id = #{userId}
     and review_status !=2
