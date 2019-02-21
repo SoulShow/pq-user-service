@@ -2,6 +2,7 @@ package com.pq.user.service.impl;
 
 import com.pq.common.constants.CacheKeyConstants;
 import com.pq.user.service.SessionService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.session.SessionRepository;
@@ -9,12 +10,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 /**
  * @author liutao
  */
 @Service
 public class SessionServiceImpl implements SessionService {
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(SessionServiceImpl.class);
+
 
     @Autowired
     private SessionRepository sessionRepository;
@@ -47,6 +51,8 @@ public class SessionServiceImpl implements SessionService {
         }
         redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
 
+        String token = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
+        logger.info("*********"+token);
     }
     @Override
     public Set<String> getSessionIdsByUserId(String userId) {
