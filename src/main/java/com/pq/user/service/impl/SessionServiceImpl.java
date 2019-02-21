@@ -37,6 +37,10 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void deleteUserSession(String userId) {
         // 删除映射
-        redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
+//        redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
+
+        String sessionId = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
+        sessionRepository.delete(sessionId);
+
     }
 }
