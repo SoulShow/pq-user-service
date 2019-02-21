@@ -49,10 +49,13 @@ public class SessionServiceImpl implements SessionService {
                 sessionRepository.delete(sessionId);
             }
         }
+        String token = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
+        logger.info("1111111*********"+token);
+        logger.info("11111111111111*********"+userId);
+
         redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
 
-        String token = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
-        logger.info("*********"+token);
+
     }
     @Override
     public Set<String> getSessionIdsByUserId(String userId) {
