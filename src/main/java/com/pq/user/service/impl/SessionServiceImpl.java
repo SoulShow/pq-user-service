@@ -40,7 +40,7 @@ public class SessionServiceImpl implements SessionService {
 //        redisTemplate.delete(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
 
         String sessionId = (String) redisTemplate.opsForValue().get(CacheKeyConstants.USER_SESSION_MAP_KEY_PREFIX + userId);
-        sessionRepository.delete(sessionId);
+        deleteUserSession(userId,sessionId);
 
     }
 }
