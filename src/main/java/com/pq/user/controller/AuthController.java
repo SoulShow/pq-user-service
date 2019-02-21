@@ -10,6 +10,7 @@ import com.pq.user.form.ForgetPasswordForm;
 import com.pq.user.form.LogoutForm;
 import com.pq.user.service.LoginService;
 import com.pq.user.service.ResetService;
+import com.pq.user.service.SessionService;
 import com.pq.user.service.UserService;
 import com.pq.user.utils.UserResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,8 @@ public class AuthController  {
     private ResetService resetService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private SessionService sessionService;
     @PostMapping("/login")
     @ResponseBody
     public UserResult<UserDto> login(@RequestBody AuthForm authForm) {
@@ -126,5 +128,20 @@ public class AuthController  {
         return result;
     }
 
-
+    @PostMapping("/admin/logout")
+    @ResponseBody
+    public UserResult adminLogoutUser(@RequestBody UserDto userDto) {
+        UserResult result = new UserResult();
+        try {
+            sessionService.deleteUserSession(userDto.getUserId());
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
 }
