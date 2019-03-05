@@ -141,8 +141,9 @@ public interface UserService {
      *
      * @param userId
      * @param content
+     * @param imgList
      */
-    void feedback(String userId ,String content);
+    void feedback(String userId ,String content,List<String> imgList);
 
     /**
      * 更新用户极光id

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pq.user.mapper.UserFeedbackImgMapper" >
+  <resultMap id="BaseResultMap" type="com.pq.user.entity.UserFeedbackImg" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="feedback_id" property="feedbackId" jdbcType="BIGINT" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pq_user_feedback_img
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pq.user.entity.UserFeedbackImg" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pq_user_feedback_img (feedback_id, img, state, 
+      created_time, updated_time)
+    values (#{feedbackId,jdbcType=BIGINT}, #{img,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.UserFeedbackImg" >
+    update pq_user_feedback_img
+    set feedback_id = #{feedbackId,jdbcType=BIGINT},
+      img = #{img,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, feedback_id, img, state, created_time, updated_time
+    from pq_user_feedback_img
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, feedback_id, img, state, created_time, updated_time
+    from pq_user_feedback_img
+  </select>
+</mapper>

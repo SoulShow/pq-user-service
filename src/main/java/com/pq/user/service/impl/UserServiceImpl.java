@@ -10,19 +10,13 @@ import com.pq.user.auth.AuthCookies;
 import com.pq.user.dto.AgencyUserDto;
 import com.pq.user.dto.RegisterRequestDto;
 import com.pq.user.dto.UserDto;
-import com.pq.user.entity.User;
-import com.pq.user.entity.UserFeedBack;
-import com.pq.user.entity.UserLogLogin;
-import com.pq.user.entity.UserLogModify;
+import com.pq.user.entity.*;
 import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.feign.AgencyFeign;
 import com.pq.user.form.AuroraPushIdForm;
-import com.pq.user.mapper.UserFeedBackMapper;
-import com.pq.user.mapper.UserLogLoginMapper;
-import com.pq.user.mapper.UserLogModifyMapper;
-import com.pq.user.mapper.UserMapper;
+import com.pq.user.mapper.*;
 import com.pq.user.service.MobileCaptchaService;
 import com.pq.user.service.SessionService;
 import com.pq.user.service.UserService;
@@ -75,6 +69,8 @@ public class UserServiceImpl implements UserService {
     private AgencyFeign agencyFeign;
     @Autowired
     private UserFeedBackMapper userFeedBackMapper;
+    @Autowired
+    private UserFeedbackImgMapper feedbackImgMapper;
 
     @Value("${php.url}")
     private String phpUrl;
@@ -299,7 +295,8 @@ public class UserServiceImpl implements UserService {
         userMapper.insert(user);
     }
     @Override
-    public void feedback(String userId ,String content){
+    @Transactional(rollbackFor = Exception.class)
+    public void feedback(String userId ,String content,List<String> imgList){
         UserFeedBack userFeedBack = new UserFeedBack();
         userFeedBack.setUserId(userId);
         userFeedBack.setContent(content);
@@ -307,6 +304,15 @@ public class UserServiceImpl implements UserService {
         userFeedBack.setCreatedTime(DateUtil.currentTime());
         userFeedBack.setUpdatedTime(DateUtil.currentTime());
         userFeedBackMapper.insert(userFeedBack);
+        for(String img:imgList){
+            UserFeedbackImg userFeedbackImg = new UserFeedbackImg();
+            userFeedbackImg.setImg(img);
+            userFeedbackImg.setFeedbackId(userFeedBack.getId());
+            userFeedbackImg.setState(0);
+            userFeedbackImg.setCreatedTime(DateUtil.currentTime());
+            userFeedbackImg.setUpdatedTime(DateUtil.currentTime());
+            feedbackImgMapper.insert(userFeedbackImg);
+        }
     }
 
     @Override

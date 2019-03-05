@@ -213,7 +213,7 @@ public class UserController {
     public UserResult feedback(@RequestBody FeedbackForm feedbackForm) {
         UserResult result = new UserResult();
         try {
-            userService.feedback(feedbackForm.getUserId(),feedbackForm.getContent());
+            userService.feedback(feedbackForm.getUserId(),feedbackForm.getContent(),feedbackForm.getImgList());
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());
