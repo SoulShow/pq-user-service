@@ -168,23 +168,25 @@ public class UserDynamicServiceImpl implements UserDynamicService {
                 continue;
             }
             User user = userMapper.selectByUserId(agencyUser.getUserId());
+            if(agencyUser.getRole()==CommonConstants.PQ_LOGIN_ROLE_PARENT) {
 
-            HashMap<String, Object> paramMap = new HashMap<>();
+                HashMap<String, Object> paramMap = new HashMap<>();
 
-            paramMap.put("parameterId", ConstantsUser.PUSH_TEMPLATE_ID_NOTICE_9);
-            paramMap.put("user", user.getHuanxinId());
-            paramMap.put("form", fromUser.getHuanxinId());
-            paramMap.put("userName", userDynamicForm.getName());
+                paramMap.put("parameterId", ConstantsUser.PUSH_TEMPLATE_ID_NOTICE_9);
+                paramMap.put("user", user.getHuanxinId());
+                paramMap.put("form", fromUser.getHuanxinId());
+                paramMap.put("userName", userDynamicForm.getName());
 
-            String huanxResult = null;
-            try {
-                huanxResult = HttpUtil.sendJson(phpUrl+"push",new HashMap<>(),JSON.toJSONString(paramMap));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            UserResult userResult = JSON.parseObject(huanxResult,UserResult.class);
-            if(userResult==null||!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())){
-                UserException.raise(UserErrors.USER_DYNAMIC_NOTICE_PUSH_ERROR);
+                String huanxResult = null;
+                try {
+                    huanxResult = HttpUtil.sendJson(phpUrl + "push", new HashMap<>(), JSON.toJSONString(paramMap));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                UserResult userResult = JSON.parseObject(huanxResult, UserResult.class);
+                if (userResult == null || !CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
+                    UserException.raise(UserErrors.USER_DYNAMIC_NOTICE_PUSH_ERROR);
+                }
             }
         }
 
