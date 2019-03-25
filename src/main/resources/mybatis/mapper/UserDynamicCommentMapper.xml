@@ -6,12 +6,14 @@
     <result column="dynamic_id" property="dynamicId" jdbcType="BIGINT" />
     <result column="originator_user_id" property="originatorUserId" jdbcType="VARCHAR" />
     <result column="originator_name" property="originatorName" jdbcType="VARCHAR" />
-    <result column="originator_student_id" property="originatorStudentId" jdbcType="VARCHAR" />
+    <result column="originator_student_id" property="originatorStudentId" jdbcType="BIGINT" />
     <result column="receiver_user_id" property="receiverUserId" jdbcType="VARCHAR" />
     <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
-    <result column="receiver_student_id" property="receiverStudentId" jdbcType="VARCHAR" />
+    <result column="receiver_student_id" property="receiverStudentId" jdbcType="BIGINT" />
     <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="is_read" property="isRead" jdbcType="INTEGER" />
     <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -25,12 +27,12 @@
     </selectKey>
     insert into pq_user_dynamic_comment (dynamic_id, originator_user_id, originator_name, 
       receiver_user_id, receiver_name, content, 
-      state, created_time, updated_time,originator_student_id,receiver_student_id
+      state, created_time, updated_time,originator_student_id,receiver_student_id,is_read,type
       )
     values (#{dynamicId,jdbcType=BIGINT}, #{originatorUserId,jdbcType=VARCHAR}, #{originatorName,jdbcType=VARCHAR}, 
       #{receiverUserId,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},
-      #{originatorStudentId},#{receiverStudentId}
+      #{originatorStudentId},#{receiverStudentId},#{isRead},#{type}#{isRead},#{type}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.UserDynamicComment" >
@@ -45,27 +47,40 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       originator_student_id = #{originatorStudentId},
-      receiver_student_id = #{receiverStudentId}
+      receiver_student_id = #{receiverStudentId},
+       is_read = #{isRead},
+      type = #{type}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, dynamic_id, originator_user_id, originator_name, receiver_user_id, receiver_name, 
     content, state, created_time, updated_time, originator_student_id,receiver_student_id
-    from pq_user_dynamic_comment
+    from pq_user_dynamic_comment,is_read,type
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, dynamic_id, originator_user_id, originator_name, receiver_user_id, receiver_name, 
     content, state, created_time, updated_time, originator_student_id,receiver_student_id
-    from pq_user_dynamic_comment
+    from pq_user_dynamic_comment,is_read,type
   </select>
 
   <select id="selectByDynamicId" resultMap="BaseResultMap" >
     select id, dynamic_id, originator_user_id, originator_name, receiver_user_id, receiver_name,
-    content, state, created_time, updated_time,originator_student_id,receiver_student_id
+    content, state, created_time, updated_time,originator_student_id,receiver_student_id,is_read,type
     from pq_user_dynamic_comment
     where dynamic_id = #{dynamicId}
     and state = 1
     order by created_time asc
+  </select>
+
+  <select id="selectByStudentId" resultMap="BaseResultMap" >
+    select c.*
+    from pq_user_dynamic_comment c , pq_user_dynamic r
+    where c.dynamic_id = r.id
+    and (c.receiver_student_id = #{studentId} or r.student_id = #{studentId})
+    and (c.originator_student_id is null or c.originator_student_id != #{studentId})
+    and c.state = 1
+    order by c.created_time desc
+    limit #{offset},#{size}
   </select>
 </mapper>

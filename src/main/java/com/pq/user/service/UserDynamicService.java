@@ -2,6 +2,7 @@ package com.pq.user.service;
 
 
 import com.pq.user.dto.CommentDto;
+import com.pq.user.dto.CommentMessageDto;
 import com.pq.user.dto.PraiseDto;
 import com.pq.user.dto.UserDynamicDto;
 import com.pq.user.form.CancelPraiseDynamicForm;
@@ -29,6 +30,15 @@ public interface UserDynamicService {
     List<UserDynamicDto> getUserDynamicList(Long agencyClassId,Long studentId,String userId, int offset,int size);
 
 
+    /**
+     * 获取动态详情
+     * @param studentId
+     * @param dynamicId
+     * @param commentId
+     * @param userId
+     * @return
+     */
+    UserDynamicDto getUserDynamicDetail(Long studentId,Long dynamicId, Long commentId,String userId);
     /**
      * 发表动态
      * @param userDynamicForm
@@ -67,4 +77,14 @@ public interface UserDynamicService {
      * @return
      */
     void deleteDynamic(Long id, String userId,Long studentId,int role);
+
+    /**
+     * 获取消息列表
+     * @param studentId
+     * @param classId
+     * @param offset
+     * @param size
+     * @return
+     */
+    List<CommentMessageDto> getCommentMessageList(Long studentId, Long classId, int offset, int size);
 }

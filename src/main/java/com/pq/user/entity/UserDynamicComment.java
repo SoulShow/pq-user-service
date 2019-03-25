@@ -11,17 +11,21 @@ public class UserDynamicComment {
 
     private String originatorName;
 
-    private String originatorStudentId;
+    private  Long originatorStudentId;
 
     private String receiverUserId;
 
     private String receiverName;
 
-    private String receiverStudentId;
+    private Long receiverStudentId;
 
     private String content;
 
     private Integer state;
+
+    private int isRead;
+
+    private int type;
 
     private Timestamp createdTime;
 
@@ -107,19 +111,36 @@ public class UserDynamicComment {
         this.state = state;
     }
 
-    public String getOriginatorStudentId() {
+
+    public Long getOriginatorStudentId() {
         return originatorStudentId;
     }
 
-    public void setOriginatorStudentId(String originatorStudentId) {
+    public void setOriginatorStudentId(Long originatorStudentId) {
         this.originatorStudentId = originatorStudentId;
     }
 
-    public String getReceiverStudentId() {
+    public Long getReceiverStudentId() {
         return receiverStudentId;
     }
 
-    public void setReceiverStudentId(String receiverStudentId) {
+    public void setReceiverStudentId(Long receiverStudentId) {
         this.receiverStudentId = receiverStudentId;
+    }
+
+    public int getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(int isRead) {
+        this.isRead = isRead;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

@@ -57,6 +57,27 @@ public class UserDynamicController {
         return result;
     }
 
+    @GetMapping("/detail")
+    @ResponseBody
+    public UserResult<UserDynamicDto> getUserDynamicDetail(@RequestParam(value = "userId")String userId,
+                                                           @RequestParam(value = "studentId",required = false) Long studentId,
+                                                           @RequestParam(value = "dynamicId") Long dynamicId,
+                                                           @RequestParam(value = "commentId",required = false) Long commentId) {
+
+        UserResult result = new UserResult();
+        try {
+            result.setData(dynamicService.getUserDynamicDetail(studentId, dynamicId, commentId, userId));
+        } catch (UserException e) {
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
     @PostMapping("")
     @ResponseBody
     public UserResult createDynamic(@RequestBody UserDynamicForm userDynamicForm) {
@@ -129,6 +150,34 @@ public class UserDynamicController {
         try {
             dynamicService.deleteDynamic(dynamicDelForm.getDynamicId(),dynamicDelForm.getUserId(),
                     dynamicDelForm.getStudentId(),dynamicDelForm.getRole());
+        } catch (UserException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+    @GetMapping("/message/list")
+    @ResponseBody
+    public UserResult<List<CommentMessageDto>> getUserDynamicMessageList(@RequestParam(value = "agencyClassId")Long agencyClassId,
+                                                           @RequestParam(value = "studentId",required = false) Long studentId,
+                                                           @RequestParam(value = "page",required = false)Integer page,
+                                                           @RequestParam(value = "size",required = false)Integer size) {
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (size == null || size < 1) {
+            size = 10;
+        }
+        int offset = (page - 1) * size;
+
+        UserResult result = new UserResult();
+        try {
+            result.setData(dynamicService.getCommentMessageList(studentId,agencyClassId,offset,size));
         } catch (UserException e){
             result.setStatus(e.getErrorCode().getErrorCode());
             result.setMessage(e.getErrorCode().getErrorMsg());

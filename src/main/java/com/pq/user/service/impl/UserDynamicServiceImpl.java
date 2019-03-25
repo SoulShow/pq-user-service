@@ -52,11 +52,11 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     private String phpUrl;
 
     @Override
-    public List<UserDynamicDto> getUserDynamicList(Long agencyClassId,Long studentId,String userId, int offset, int size){
+    public List<UserDynamicDto> getUserDynamicList(Long agencyClassId, Long studentId, String userId, int offset, int size) {
 
         List<UserDynamicDto> dynamicDtoList = new ArrayList<>();
-        List<UserDynamic> userDynamicList = userDynamicMapper.selectUserClassDynamicByClassId(agencyClassId,offset,size);
-        for(UserDynamic userDynamic : userDynamicList){
+        List<UserDynamic> userDynamicList = userDynamicMapper.selectUserClassDynamicByClassId(agencyClassId, offset, size);
+        for (UserDynamic userDynamic : userDynamicList) {
 
             UserDynamicDto userDynamicDto = new UserDynamicDto();
             userDynamicDto.setId(userDynamic.getId());
@@ -66,27 +66,27 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             userDynamicDto.setContent(userDynamic.getContent());
             userDynamicDto.setPraiseCount(userDynamic.getPraiseCount());
             userDynamicDto.setCommentCount(userDynamic.getCommentCount());
-            userDynamicDto.setCreatedTime(DateUtil.formatDate(userDynamic.getCreatedTime(),DateUtil.DEFAULT_DATETIME_FORMAT));
+            userDynamicDto.setCreatedTime(DateUtil.formatDate(userDynamic.getCreatedTime(), DateUtil.DEFAULT_DATETIME_FORMAT));
 
             List<UserDynamicImg> imgList = userDynamicImgMapper.selectByDynamicId(userDynamic.getId());
             List<String> imgs = new ArrayList<>();
-            for(UserDynamicImg userDynamicImg : imgList){
-                if(userDynamicImg.getType()==ConstantsUser.USER_DYNAMIC_IMG_TYPE_IMG){
+            for (UserDynamicImg userDynamicImg : imgList) {
+                if (userDynamicImg.getType() == ConstantsUser.USER_DYNAMIC_IMG_TYPE_IMG) {
                     imgs.add(userDynamicImg.getImg());
-                }else {
+                } else {
                     userDynamicDto.setMovieUrl(userDynamicImg.getImg());
                 }
             }
             userDynamicDto.setImgList(imgs);
 
             userDynamicDto.setPraiseList(getDynamicPraiseDtoList(userDynamic));
-            for(DynamicPraiseDto dynamicPraiseDto:userDynamicDto.getPraiseList()){
-                if(studentId==null || studentId==0){
-                    if(userId.equals(dynamicPraiseDto.getUserId())){
+            for (DynamicPraiseDto dynamicPraiseDto : userDynamicDto.getPraiseList()) {
+                if (studentId == null || studentId == 0) {
+                    if (userId.equals(dynamicPraiseDto.getUserId())) {
                         userDynamicDto.setPraiseState(1);
                     }
-                }else {
-                    if(userId.equals(dynamicPraiseDto.getUserId())&& studentId.equals(dynamicPraiseDto.getStudentId())){
+                } else {
+                    if (userId.equals(dynamicPraiseDto.getUserId()) && studentId.equals(dynamicPraiseDto.getStudentId())) {
                         userDynamicDto.setPraiseState(1);
                     }
                 }
@@ -99,10 +99,10 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         return dynamicDtoList;
     }
 
-    private List<DynamicPraiseDto> getDynamicPraiseDtoList(UserDynamic userDynamic){
+    private List<DynamicPraiseDto> getDynamicPraiseDtoList(UserDynamic userDynamic) {
         List<DynamicPraiseDto> dynamicPraiseDtoList = new ArrayList<>();
         List<UserDynamicPraise> praiseList = userDynamicPraiseMapper.selectByDynamicId(userDynamic.getId());
-        for(UserDynamicPraise userDynamicPraise:praiseList){
+        for (UserDynamicPraise userDynamicPraise : praiseList) {
             DynamicPraiseDto dynamicPraiseDto = new DynamicPraiseDto();
             dynamicPraiseDto.setId(userDynamicPraise.getId());
             dynamicPraiseDto.setName(userDynamicPraise.getName());
@@ -113,10 +113,10 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         return dynamicPraiseDtoList;
     }
 
-    private List<DynamicCommentDto> getDynamicCommentDtolist(UserDynamic userDynamic){
+    private List<DynamicCommentDto> getDynamicCommentDtolist(UserDynamic userDynamic) {
         List<UserDynamicComment> commentList = userDynamicCommentMapper.selectByDynamicId(userDynamic.getId());
         List<DynamicCommentDto> dynamicCommentDtos = new ArrayList<>();
-        for(UserDynamicComment dynamicComment:commentList){
+        for (UserDynamicComment dynamicComment : commentList) {
             DynamicCommentDto dynamicCommentDto = new DynamicCommentDto();
             dynamicCommentDto.setId(dynamicComment.getId());
             dynamicCommentDto.setDynamicId(dynamicComment.getDynamicId());
@@ -132,10 +132,58 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         return dynamicCommentDtos;
     }
 
+    @Override
+    public UserDynamicDto getUserDynamicDetail(Long studentId,Long dynamicId,Long commentId,String userId){
 
+        if(commentId!=null && commentId!=0){
+            UserDynamicComment userDynamicComment = userDynamicCommentMapper.selectByPrimaryKey(commentId);
+            if(userDynamicComment.getIsRead()==0){
+                userDynamicComment.setIsRead(1);
+                userDynamicComment.setUpdatedTime(DateUtil.currentTime());
+                userDynamicCommentMapper.updateByPrimaryKey(userDynamicComment);
+            }
+        }
+        UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(dynamicId);
+        UserDynamicDto userDynamicDto = new UserDynamicDto();
+        userDynamicDto.setId(userDynamic.getId());
+        userDynamicDto.setUserId(userDynamic.getUserId());
+        userDynamicDto.setName(userDynamic.getName());
+        userDynamicDto.setAvatar(userMapper.selectByUserId(userDynamic.getUserId()).getAvatar());
+        userDynamicDto.setContent(userDynamic.getContent());
+        userDynamicDto.setPraiseCount(userDynamic.getPraiseCount());
+        userDynamicDto.setCommentCount(userDynamic.getCommentCount());
+        userDynamicDto.setCreatedTime(DateUtil.formatDate(userDynamic.getCreatedTime(), DateUtil.DEFAULT_DATETIME_FORMAT));
+
+        List<UserDynamicImg> imgList = userDynamicImgMapper.selectByDynamicId(userDynamic.getId());
+        List<String> imgs = new ArrayList<>();
+        for (UserDynamicImg userDynamicImg : imgList) {
+            if (userDynamicImg.getType() == ConstantsUser.USER_DYNAMIC_IMG_TYPE_IMG) {
+                imgs.add(userDynamicImg.getImg());
+            } else {
+                userDynamicDto.setMovieUrl(userDynamicImg.getImg());
+            }
+        }
+        userDynamicDto.setImgList(imgs);
+
+        userDynamicDto.setPraiseList(getDynamicPraiseDtoList(userDynamic));
+        for (DynamicPraiseDto dynamicPraiseDto : userDynamicDto.getPraiseList()) {
+            if (studentId == null || studentId == 0) {
+                if (userId.equals(dynamicPraiseDto.getUserId())) {
+                    userDynamicDto.setPraiseState(1);
+                }
+            } else {
+                if (userId.equals(dynamicPraiseDto.getUserId()) && studentId.equals(dynamicPraiseDto.getStudentId())) {
+                    userDynamicDto.setPraiseState(1);
+                }
+            }
+        }
+
+        userDynamicDto.setCommentList(getDynamicCommentDtolist(userDynamic));
+        return userDynamicDto;
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createDynamic(UserDynamicForm userDynamicForm){
+    public void createDynamic(UserDynamicForm userDynamicForm) {
         UserDynamic userDynamic = new UserDynamic();
         userDynamic.setUserId(userDynamicForm.getUserId());
         userDynamic.setAgencyClassId(userDynamicForm.getAgencyClassId());
@@ -149,26 +197,26 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamic.setUpdatedTime(DateUtil.currentTime());
         userDynamicMapper.insert(userDynamic);
 
-        for(String img : userDynamicForm.getImgList()){
-            createImg(img,userDynamic.getId(),ConstantsUser.USER_DYNAMIC_IMG_TYPE_IMG);
+        for (String img : userDynamicForm.getImgList()) {
+            createImg(img, userDynamic.getId(), ConstantsUser.USER_DYNAMIC_IMG_TYPE_IMG);
         }
-        if(!StringUtil.isEmpty(userDynamicForm.getMovieUrl())){
-            createImg(userDynamicForm.getMovieUrl(),userDynamic.getId(),ConstantsUser.USER_DYNAMIC_IMG_TYPE_MOVIE);
+        if (!StringUtil.isEmpty(userDynamicForm.getMovieUrl())) {
+            createImg(userDynamicForm.getMovieUrl(), userDynamic.getId(), ConstantsUser.USER_DYNAMIC_IMG_TYPE_MOVIE);
         }
 
         UserResult<List<UserDto>> result = agencyFeign.getAllAgencyClassUser(userDynamicForm.getAgencyClassId());
-        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
-            throw new UserException(new UserErrorCode(result.getStatus(),result.getMessage()));
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+            throw new UserException(new UserErrorCode(result.getStatus(), result.getMessage()));
         }
         User fromUser = userMapper.selectByUserId(userDynamicForm.getUserId());
 
 
-        for(UserDto agencyUser: result.getData()){
-            if(agencyUser.getUserId().equals(userDynamicForm.getUserId())){
+        for (UserDto agencyUser : result.getData()) {
+            if (agencyUser.getUserId().equals(userDynamicForm.getUserId())) {
                 continue;
             }
             User user = userMapper.selectByUserId(agencyUser.getUserId());
-            if(agencyUser.getRole()==CommonConstants.PQ_LOGIN_ROLE_PARENT) {
+            if (agencyUser.getRole() == CommonConstants.PQ_LOGIN_ROLE_PARENT) {
 
                 HashMap<String, Object> paramMap = new HashMap<>();
 
@@ -191,7 +239,8 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         }
 
     }
-    private void createImg(String img,Long id,int type){
+
+    private void createImg(String img, Long id, int type) {
         UserDynamicImg userDynamicImg = new UserDynamicImg();
         userDynamicImg.setDynamicId(id);
         userDynamicImg.setImg(img);
@@ -201,14 +250,15 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamicImg.setUpdatedTime(DateUtil.currentTime());
         userDynamicImgMapper.insert(userDynamicImg);
     }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public PraiseDto praiseDynamic(PraiseDynamicForm praiseDynamicForm){
+    public PraiseDto praiseDynamic(PraiseDynamicForm praiseDynamicForm) {
 
         UserDynamicPraise dynamicPraise = userDynamicPraiseMapper.
-                selectByDynamicIdAndUserIdAndStudentId(praiseDynamicForm.getDynamicId(),praiseDynamicForm.getUserId(),
+                selectByDynamicIdAndUserIdAndStudentId(praiseDynamicForm.getDynamicId(), praiseDynamicForm.getUserId(),
                         praiseDynamicForm.getStudentId());
-        if(dynamicPraise!=null){
+        if (dynamicPraise != null) {
             UserException.raise(UserErrors.USER_PRAISE_IS_EXIST_ERROR);
         }
         dynamicPraise = new UserDynamicPraise();
@@ -221,6 +271,19 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         dynamicPraise.setCreatedTime(DateUtil.currentTime());
         userDynamicPraiseMapper.insert(dynamicPraise);
 
+        UserDynamicComment userDynamicComment = new UserDynamicComment();
+        userDynamicComment.setDynamicId(dynamicPraise.getDynamicId());
+        userDynamicComment.setOriginatorUserId(dynamicPraise.getUserId());
+        userDynamicComment.setOriginatorName(dynamicPraise.getName());
+        userDynamicComment.setOriginatorStudentId(dynamicPraise.getStudentId());
+        userDynamicComment.setContent("点赞");
+        userDynamicComment.setIsRead(0);
+        userDynamicComment.setState(1);
+        userDynamicComment.setType(2);
+        userDynamicComment.setCreatedTime(DateUtil.currentTime());
+        userDynamicComment.setUpdatedTime(DateUtil.currentTime());
+        userDynamicCommentMapper.insert(userDynamicComment);
+
         userDynamicMapper.addPraiseCountById(dynamicPraise.getDynamicId());
 
         UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(dynamicPraise.getDynamicId());
@@ -229,11 +292,12 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         praiseDto.setPraiseCount(userDynamic.getPraiseCount());
         return praiseDto;
     }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public PraiseDto cancelPraiseDynamic(CancelPraiseDynamicForm cancelPraiseDynamicForm){
+    public PraiseDto cancelPraiseDynamic(CancelPraiseDynamicForm cancelPraiseDynamicForm) {
         UserDynamicPraise dynamicPraise = userDynamicPraiseMapper.selectByDynamicIdAndUserIdAndStudentId(cancelPraiseDynamicForm.getDynamicId(),
-                cancelPraiseDynamicForm.getUserId(),cancelPraiseDynamicForm.getStudentId());
+                cancelPraiseDynamicForm.getUserId(), cancelPraiseDynamicForm.getStudentId());
 
         dynamicPraise.setState(CommonConstants.PQ_STATE_UN_VALID);
         dynamicPraise.setUpdatedTime(DateUtil.currentTime());
@@ -250,12 +314,14 @@ public class UserDynamicServiceImpl implements UserDynamicService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public CommentDto createDynamicComment(UserDynamicCommentForm dynamicCommentForm){
+    public CommentDto createDynamicComment(UserDynamicCommentForm dynamicCommentForm) {
         UserDynamicComment userDynamicComment = new UserDynamicComment();
-        BeanUtils.copyProperties(dynamicCommentForm,userDynamicComment);
+        BeanUtils.copyProperties(dynamicCommentForm, userDynamicComment);
         userDynamicComment.setState(CommonConstants.PQ_STATE_VALID);
         userDynamicComment.setCreatedTime(DateUtil.currentTime());
         userDynamicComment.setUpdatedTime(DateUtil.currentTime());
+        userDynamicComment.setIsRead(0);
+        userDynamicComment.setType(1);
         userDynamicCommentMapper.insert(userDynamicComment);
 
         userDynamicMapper.addCommentCountById(userDynamicComment.getDynamicId());
@@ -266,17 +332,18 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         commentDto.setList(getDynamicCommentDtolist(userDynamic));
         return commentDto;
     }
+
     @Override
-    public void deleteDynamic(Long id, String userId,Long studentId,int role){
+    public void deleteDynamic(Long id, String userId, Long studentId, int role) {
         UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(id);
-        if(userDynamic==null){
+        if (userDynamic == null) {
             UserException.raise(UserErrors.USER_DYNAMIC_NOT_EXIST_ERROR);
         }
-        if(!userId.equals(userDynamic.getUserId())){
+        if (!userId.equals(userDynamic.getUserId())) {
             UserException.raise(UserErrors.USER_DYNAMIC_CAN_NOT_DELETE_ERROR);
         }
-        if(role==CommonConstants.PQ_LOGIN_ROLE_PARENT){
-            if(!studentId.equals(userDynamic.getStudentId())){
+        if (role == CommonConstants.PQ_LOGIN_ROLE_PARENT) {
+            if (!studentId.equals(userDynamic.getStudentId())) {
                 UserException.raise(UserErrors.USER_DYNAMIC_CAN_NOT_DELETE_ERROR);
             }
         }
@@ -286,6 +353,56 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamicMapper.updateByPrimaryKey(userDynamic);
     }
 
+    @Override
+    public List<CommentMessageDto> getCommentMessageList(Long studentId, Long classId, int offset, int size) {
+        List<UserDynamicComment> commentList = userDynamicCommentMapper.selectByStudentId(studentId, offset, size);
 
+        List<CommentMessageDto> list = new ArrayList<>();
+        for (UserDynamicComment userDynamicComment : commentList) {
+            CommentMessageDto commentMessageDto = new CommentMessageDto();
+            commentMessageDto.setDynamicId(userDynamicComment.getId());
+            commentMessageDto.setOriginatorUserId(userDynamicComment.getOriginatorUserId());
+            commentMessageDto.setOriginatorStudentId(userDynamicComment.getOriginatorStudentId());
+            commentMessageDto.setOriginatorName(userDynamicComment.getOriginatorName());
+            if (userDynamicComment.getOriginatorStudentId() != null && userDynamicComment.getOriginatorStudentId() != 0) {
+                UserResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(userDynamicComment.getOriginatorStudentId());
+                if (!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())) {
+                    throw new UserException(new UserErrorCode(studentInfo.getStatus(), studentInfo.getMessage()));
+                }
+                commentMessageDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
+                commentMessageDto.setClassName(studentInfo.getData().getClassName());
+            } else {
+                User user = userMapper.selectByUserId(userDynamicComment.getOriginatorUserId());
 
+                commentMessageDto.setOriginatorAvatar(user.getAvatar());
+                commentMessageDto.setOriginatorName(user.getName());
+
+                UserResult<AgencyClassDto> classInfo = agencyFeign.getAgencyClassInfo(classId);
+                if (!CommonErrors.SUCCESS.getErrorCode().equals(classInfo.getStatus())) {
+                    throw new UserException(new UserErrorCode(classInfo.getStatus(), classInfo.getMessage()));
+                }
+                commentMessageDto.setClassName(classInfo.getData().getName());
+
+            }
+            commentMessageDto.setReceiverUserId(userDynamicComment.getReceiverUserId());
+            commentMessageDto.setReceiverStudentId(userDynamicComment.getReceiverStudentId());
+            commentMessageDto.setReceiverName(userDynamicComment.getReceiverName());
+            commentMessageDto.setContent(userDynamicComment.getContent());
+            commentMessageDto.setCreatedTime(DateUtil.formatDate(userDynamicComment.getCreatedTime(), DateUtil.DEFAULT_TIME_MINUTE));
+            commentMessageDto.setIsRead(userDynamicComment.getIsRead());
+            commentMessageDto.setType(userDynamicComment.getType());
+            UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(userDynamicComment.getDynamicId());
+            if (userDynamic == null) {
+                UserException.raise(UserErrors.USER_DYNAMIC_NOT_EXIST_ERROR);
+            }
+            List<UserDynamicImg> imgList = userDynamicImgMapper.selectByDynamicId(userDynamic.getId());
+            if(imgList!=null && imgList.size()>0){
+                commentMessageDto.setImg(imgList.get(0).getImg());
+            }
+            commentMessageDto.setName(userDynamic.getName());
+            commentMessageDto.setDynamicId(userDynamic.getId());
+            list.add(commentMessageDto);
+        }
+        return list;
+    }
 }

@@ -1,6 +1,8 @@
 package com.pq.user.feign;
 
 
+import com.pq.user.dto.AgencyClassDto;
+import com.pq.user.dto.AgencyStudentDto;
 import com.pq.user.dto.AgencyUserDto;
 import com.pq.user.dto.UserDto;
 import com.pq.user.utils.UserResult;
@@ -40,5 +42,22 @@ public interface AgencyFeign {
      */
     @RequestMapping(value = "/agency/user/class/users", method = RequestMethod.GET)
     UserResult<List<UserDto>> getAllAgencyClassUser(@RequestParam("classId") Long classId);
+
+    /**
+     * 获取学生信息
+     * @param studentId
+     * @return
+     */
+    @RequestMapping(value = "/agency/student/info", method = RequestMethod.GET)
+    UserResult<AgencyStudentDto> getStudentInfo(@RequestParam(value = "studentId") Long studentId);
+
+    /**
+     * 获取班级信息
+     * @param agencyClassId
+     * @return
+     */
+    @RequestMapping(value = "/agency/class/info", method = RequestMethod.GET)
+    UserResult<AgencyClassDto> getAgencyClassInfo(@RequestParam(value = "agencyClassId") Long agencyClassId);
+
 
 }
