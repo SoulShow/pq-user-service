@@ -70,6 +70,7 @@
     from pq_user_dynamic_comment
     where dynamic_id = #{dynamicId}
     and state = 1
+    and type = 1
     order by created_time asc
   </select>
 
@@ -94,5 +95,15 @@
     and c.state = 1
     order by c.created_time desc
     limit #{offset},#{size}
+  </select>
+
+  <select id="selectByDynamicIdAndTypeAndUserId" resultMap="BaseResultMap" >
+    select id, dynamic_id, originator_user_id, originator_name, receiver_user_id, receiver_name,
+    content, state, created_time, updated_time,originator_student_id,receiver_student_id,is_read,type
+    from pq_user_dynamic_comment
+    where dynamic_id = #{dynamicId}
+    and originator_user_id = #{userId}
+    and state = 1
+    and type = #{type}
   </select>
 </mapper>

@@ -322,6 +322,10 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         dynamicPraise.setUpdatedTime(DateUtil.currentTime());
         userDynamicPraiseMapper.updateByPrimaryKey(dynamicPraise);
 
+        UserDynamicComment dynamicComment = userDynamicCommentMapper.selectByDynamicIdAndTypeAndUserId(dynamicPraise.getDynamicId(),2,cancelPraiseDynamicForm.getUserId());
+        dynamicComment.setState(0);
+        userDynamicCommentMapper.updateByPrimaryKey(dynamicComment);
+
         userDynamicMapper.subPraiseCountById(dynamicPraise.getDynamicId());
 
         UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(dynamicPraise.getDynamicId());
@@ -423,6 +427,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             if(imgList!=null && imgList.size()>0){
                 commentMessageDto.setImg(imgList.get(0).getImg());
             }
+            commentMessageDto.setContent(userDynamic.getContent());
             commentMessageDto.setName(userDynamic.getName());
             commentMessageDto.setDynamicId(userDynamic.getId());
             list.add(commentMessageDto);
