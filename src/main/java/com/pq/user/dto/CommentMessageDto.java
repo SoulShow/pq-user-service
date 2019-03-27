@@ -33,7 +33,7 @@ public class CommentMessageDto {
 
     private int type;
 
-    private String dynamicIdContent;
+    private String dynamicContent;
 
 
     public String getOriginatorUserId() {
@@ -164,11 +164,12 @@ public class CommentMessageDto {
         this.commentId = commentId;
     }
 
-    public String getDynamicIdContent() {
-        return dynamicIdContent;
+
+    public String getDynamicContent() {
+        return dynamicContent;
     }
 
-    public void setDynamicIdContent(String dynamicIdContent) {
-        this.dynamicIdContent = dynamicIdContent;
+    public void setDynamicContent(String dynamicContent) {
+        this.dynamicContent = dynamicContent;
     }
 }
