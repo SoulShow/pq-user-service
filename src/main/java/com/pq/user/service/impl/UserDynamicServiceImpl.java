@@ -427,7 +427,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             if(imgList!=null && imgList.size()>0){
                 commentMessageDto.setImg(imgList.get(0).getImg());
             }
-            commentMessageDto.setDynamicIdContent(userDynamic.getContent());
+            commentMessageDto.setDynamicContent(userDynamic.getContent());
             commentMessageDto.setName(userDynamic.getName());
             commentMessageDto.setDynamicId(userDynamic.getId());
             list.add(commentMessageDto);
