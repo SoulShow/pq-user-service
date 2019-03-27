@@ -29,6 +29,8 @@ public class UserDynamicDto {
 
     private List<DynamicCommentDto> commentList;
 
+    private DynamicReadingDto dynamicReading;
+
     public Long getId() {
         return id;
     }
@@ -131,5 +133,13 @@ public class UserDynamicDto {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public DynamicReadingDto getDynamicReading() {
+        return dynamicReading;
+    }
+
+    public void setDynamicReading(DynamicReadingDto dynamicReading) {
+        this.dynamicReading = dynamicReading;
     }
 }

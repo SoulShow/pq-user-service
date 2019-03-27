@@ -17,6 +17,8 @@ public class UserDynamicForm {
 
     private Long studentId;
 
+    private Long readingRecordId = 0L;
+
     public String getUserId() {
         return userId;
     }
@@ -71,5 +73,13 @@ public class UserDynamicForm {
 
     public void setStudentId(Long studentId) {
         this.studentId = studentId;
+    }
+
+    public Long getReadingRecordId() {
+        return readingRecordId;
+    }
+
+    public void setReadingRecordId(Long readingRecordId) {
+        this.readingRecordId = readingRecordId;
     }
 }

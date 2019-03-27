@@ -15,6 +15,8 @@ public class UserDynamic {
 
     private String content;
 
+    private Long readingRecordId;
+
     private Integer praiseCount;
 
     private Integer commentCount;
@@ -111,5 +113,13 @@ public class UserDynamic {
 
     public void setStudentId(Long studentId) {
         this.studentId = studentId;
+    }
+
+    public Long getReadingRecordId() {
+        return readingRecordId;
+    }
+
+    public void setReadingRecordId(Long readingRecordId) {
+        this.readingRecordId = readingRecordId;
     }
 }

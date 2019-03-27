@@ -12,6 +12,7 @@ import com.pq.user.exception.UserErrorCode;
 import com.pq.user.exception.UserErrors;
 import com.pq.user.exception.UserException;
 import com.pq.user.feign.AgencyFeign;
+import com.pq.user.feign.ReadingFeign;
 import com.pq.user.form.CancelPraiseDynamicForm;
 import com.pq.user.form.PraiseDynamicForm;
 import com.pq.user.form.UserDynamicCommentForm;
@@ -47,6 +48,8 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     private UserMapper userMapper;
     @Autowired
     private AgencyFeign agencyFeign;
+    @Autowired
+    private ReadingFeign readingFeign;
 
     @Value("${php.url}")
     private String phpUrl;
@@ -93,6 +96,13 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             }
 
             userDynamicDto.setCommentList(getDynamicCommentDtolist(userDynamic));
+            if(userDynamic.getReadingRecordId()!=null && userDynamic.getReadingRecordId()>0){
+                UserResult<DynamicReadingDto> result = readingFeign.getDynamicReading(userDynamic.getReadingRecordId());
+                if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+                    throw new UserException(new UserErrorCode(result.getStatus(), result.getMessage()));
+                }
+                userDynamicDto.setDynamicReading(result.getData());
+            }
 
             dynamicDtoList.add(userDynamicDto);
         }
@@ -179,6 +189,14 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         }
 
         userDynamicDto.setCommentList(getDynamicCommentDtolist(userDynamic));
+
+        if(userDynamic.getReadingRecordId()!=null && userDynamic.getReadingRecordId()>0){
+            UserResult<DynamicReadingDto> result = readingFeign.getDynamicReading(userDynamic.getReadingRecordId());
+            if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+                throw new UserException(new UserErrorCode(result.getStatus(), result.getMessage()));
+            }
+            userDynamicDto.setDynamicReading(result.getData());
+        }
         return userDynamicDto;
     }
     @Override
@@ -195,6 +213,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamic.setState(CommonConstants.PQ_STATE_VALID);
         userDynamic.setCreatedTime(DateUtil.currentTime());
         userDynamic.setUpdatedTime(DateUtil.currentTime());
+        userDynamic.setReadingRecordId(userDynamicForm.getReadingRecordId());
         userDynamicMapper.insert(userDynamic);
 
         for (String img : userDynamicForm.getImgList()) {

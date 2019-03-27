@@ -32,7 +32,7 @@
     values (#{dynamicId,jdbcType=BIGINT}, #{originatorUserId,jdbcType=VARCHAR}, #{originatorName,jdbcType=VARCHAR}, 
       #{receiverUserId,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},
-      #{originatorStudentId},#{receiverStudentId},#{isRead},#{type}#{isRead},#{type}
+      #{originatorStudentId},#{receiverStudentId},#{isRead},#{type}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.user.entity.UserDynamicComment" >
