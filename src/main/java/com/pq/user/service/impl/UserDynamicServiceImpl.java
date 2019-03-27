@@ -379,7 +379,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         List<CommentMessageDto> list = new ArrayList<>();
         for (UserDynamicComment userDynamicComment : commentList) {
             CommentMessageDto commentMessageDto = new CommentMessageDto();
-            commentMessageDto.setDynamicId(userDynamicComment.getId());
+            commentMessageDto.setCommentId(userDynamicComment.getId());
             commentMessageDto.setOriginatorUserId(userDynamicComment.getOriginatorUserId());
             commentMessageDto.setOriginatorStudentId(userDynamicComment.getOriginatorStudentId());
             commentMessageDto.setOriginatorName(userDynamicComment.getOriginatorName());
