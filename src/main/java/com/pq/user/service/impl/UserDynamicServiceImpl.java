@@ -213,7 +213,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamic.setState(CommonConstants.PQ_STATE_VALID);
         userDynamic.setCreatedTime(DateUtil.currentTime());
         userDynamic.setUpdatedTime(DateUtil.currentTime());
-        userDynamic.setReadingRecordId(userDynamicForm.getReadingRecordId());
+        userDynamic.setReadingRecordId(userDynamicForm.getReadingRecordId()==null?0:userDynamicForm.getReadingRecordId());
         userDynamicMapper.insert(userDynamic);
 
         for (String img : userDynamicForm.getImgList()) {
