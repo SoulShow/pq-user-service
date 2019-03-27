@@ -381,7 +381,6 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             commentList = userDynamicCommentMapper.selectByUserId(userId, offset, size);
         }
 
-
         List<CommentMessageDto> list = new ArrayList<>();
         for (UserDynamicComment userDynamicComment : commentList) {
             CommentMessageDto commentMessageDto = new CommentMessageDto();
