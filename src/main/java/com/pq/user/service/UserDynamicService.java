@@ -82,9 +82,11 @@ public interface UserDynamicService {
      * 获取消息列表
      * @param studentId
      * @param classId
+     * @param userId
+     * @param role
      * @param offset
      * @param size
      * @return
      */
-    List<CommentMessageDto> getCommentMessageList(Long studentId, Long classId, int offset, int size);
+    List<CommentMessageDto> getCommentMessageList(Long studentId, Long classId,String userId,int role, int offset, int size);
 }

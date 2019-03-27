@@ -373,8 +373,14 @@ public class UserDynamicServiceImpl implements UserDynamicService {
     }
 
     @Override
-    public List<CommentMessageDto> getCommentMessageList(Long studentId, Long classId, int offset, int size) {
-        List<UserDynamicComment> commentList = userDynamicCommentMapper.selectByStudentId(studentId, offset, size);
+    public List<CommentMessageDto> getCommentMessageList(Long studentId, Long classId, String userId,int role,int offset, int size) {
+        List<UserDynamicComment> commentList = new ArrayList<>() ;
+        if(role==CommonConstants.PQ_LOGIN_ROLE_PARENT){
+            commentList = userDynamicCommentMapper.selectByStudentId(studentId, offset, size);
+        }else {
+            commentList = userDynamicCommentMapper.selectByUserId(userId, offset, size);
+        }
+
 
         List<CommentMessageDto> list = new ArrayList<>();
         for (UserDynamicComment userDynamicComment : commentList) {
