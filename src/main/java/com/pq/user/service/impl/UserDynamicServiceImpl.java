@@ -328,9 +328,11 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         userDynamicPraiseMapper.updateByPrimaryKey(dynamicPraise);
 
         UserDynamicComment dynamicComment = userDynamicCommentMapper.selectByDynamicIdAndTypeAndUserId(dynamicPraise.getDynamicId(),2,cancelPraiseDynamicForm.getUserId());
-        dynamicComment.setState(0);
-        userDynamicCommentMapper.updateByPrimaryKey(dynamicComment);
 
+        if(dynamicComment != null){
+            dynamicComment.setState(0);
+            userDynamicCommentMapper.updateByPrimaryKey(dynamicComment);
+        }
         userDynamicMapper.subPraiseCountById(dynamicPraise.getDynamicId());
 
         UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(dynamicPraise.getDynamicId());
