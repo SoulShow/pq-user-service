@@ -396,6 +396,11 @@ public class UserDynamicServiceImpl implements UserDynamicService {
 
         List<CommentMessageDto> list = new ArrayList<>();
         for (UserDynamicComment userDynamicComment : commentList) {
+            UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(userDynamicComment.getDynamicId());
+            if (userDynamic == null) {
+                continue;
+            }
+
             CommentMessageDto commentMessageDto = new CommentMessageDto();
             commentMessageDto.setCommentId(userDynamicComment.getId());
             commentMessageDto.setOriginatorUserId(userDynamicComment.getOriginatorUserId());
@@ -428,10 +433,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             commentMessageDto.setCreatedTime(DateUtil.formatDate(userDynamicComment.getCreatedTime(), DateUtil.DEFAULT_TIME_MINUTE));
             commentMessageDto.setIsRead(userDynamicComment.getIsRead());
             commentMessageDto.setType(userDynamicComment.getType());
-            UserDynamic userDynamic = userDynamicMapper.selectByPrimaryKey(userDynamicComment.getDynamicId());
-            if (userDynamic == null) {
-                UserException.raise(UserErrors.USER_DYNAMIC_NOT_EXIST_ERROR);
-            }
+
             List<UserDynamicImg> imgList = userDynamicImgMapper.selectByDynamicId(userDynamic.getId());
             if(imgList!=null && imgList.size()>0){
                 commentMessageDto.setImg(imgList.get(0).getImg());
