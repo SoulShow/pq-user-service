@@ -7,6 +7,8 @@ public class UserDynamicDto {
 
     private String userId;
 
+    private Long studentId;
+
     private String name;
 
     private String avatar;
@@ -141,5 +143,13 @@ public class UserDynamicDto {
 
     public void setDynamicReading(DynamicReadingDto dynamicReading) {
         this.dynamicReading = dynamicReading;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

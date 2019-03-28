@@ -64,6 +64,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             UserDynamicDto userDynamicDto = new UserDynamicDto();
             userDynamicDto.setId(userDynamic.getId());
             userDynamicDto.setUserId(userDynamic.getUserId());
+            userDynamicDto.setStudentId(userDynamic.getStudentId());
             userDynamicDto.setName(userDynamic.getName());
             userDynamicDto.setAvatar(userMapper.selectByUserId(userDynamic.getUserId()).getAvatar());
             userDynamicDto.setContent(userDynamic.getContent());
@@ -162,6 +163,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         UserDynamicDto userDynamicDto = new UserDynamicDto();
         userDynamicDto.setId(userDynamic.getId());
         userDynamicDto.setUserId(userDynamic.getUserId());
+        userDynamicDto.setStudentId(userDynamic.getStudentId());
         userDynamicDto.setName(userDynamic.getName());
         userDynamicDto.setAvatar(userMapper.selectByUserId(userDynamic.getUserId()).getAvatar());
         userDynamicDto.setContent(userDynamic.getContent());
