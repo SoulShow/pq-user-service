@@ -117,6 +117,11 @@ public class UserDynamicServiceImpl implements UserDynamicService {
             dynamicPraiseDto.setId(userDynamicPraise.getId());
             dynamicPraiseDto.setName(userDynamicPraise.getName());
             dynamicPraiseDto.setUserId(userDynamicPraise.getUserId());
+            User user = userMapper.selectByUserId(userDynamicPraise.getUserId());
+            if(user==null){
+                UserException.raise(UserErrors.USER_ID_IS_NULL);
+            }
+            dynamicPraiseDto.setAvatar(user.getAvatar());
             dynamicPraiseDto.setStudentId(userDynamicPraise.getStudentId());
             dynamicPraiseDtoList.add(dynamicPraiseDto);
         }
