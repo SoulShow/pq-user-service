@@ -14,6 +14,10 @@ public class DynamicReadingDto {
 
    private String className;
 
+   private Long classId;
+
+   private Long studentId;
+
    public Long getReadingId() {
       return readingId;
    }
@@ -60,5 +64,21 @@ public class DynamicReadingDto {
 
    public void setClassName(String className) {
       this.className = className;
+   }
+
+   public Long getClassId() {
+      return classId;
+   }
+
+   public void setClassId(Long classId) {
+      this.classId = classId;
+   }
+
+   public Long getStudentId() {
+      return studentId;
+   }
+
+   public void setStudentId(Long studentId) {
+      this.studentId = studentId;
    }
 }
