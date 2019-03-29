@@ -391,7 +391,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
         if(role==CommonConstants.PQ_LOGIN_ROLE_PARENT){
             commentList = userDynamicCommentMapper.selectByStudentId(studentId, offset, size);
         }else {
-            commentList = userDynamicCommentMapper.selectByUserId(userId, offset, size);
+            commentList = userDynamicCommentMapper.selectByUserId(classId,userId, offset, size);
         }
 
         List<CommentMessageDto> list = new ArrayList<>();
@@ -422,7 +422,6 @@ public class UserDynamicServiceImpl implements UserDynamicService {
                     throw new UserException(new UserErrorCode(classInfo.getStatus(), classInfo.getMessage()));
                 }
                 commentMessageDto.setClassName(classInfo.getData().getName());
-
             }
             commentMessageDto.setReceiverUserId(userDynamicComment.getReceiverUserId());
             commentMessageDto.setReceiverStudentId(userDynamicComment.getReceiverStudentId());

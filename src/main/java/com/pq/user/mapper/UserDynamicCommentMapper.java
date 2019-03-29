@@ -22,7 +22,8 @@ public interface UserDynamicCommentMapper {
                                                   @Param("offset") int offset,
                                                   @Param("size") int size);
 
-    List<UserDynamicComment> selectByUserId(@Param("userId")String userId,
+    List<UserDynamicComment> selectByUserId(@Param("classId")Long classId,
+                                            @Param("userId")String userId,
                                             @Param("offset") int offset,
                                             @Param("size") int size);
 

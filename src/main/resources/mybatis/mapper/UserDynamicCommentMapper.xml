@@ -89,6 +89,7 @@
     select c.*
     from pq_user_dynamic_comment c , pq_user_dynamic r
     where c.dynamic_id = r.id
+    and r.agency_class_id = #{classId}
     and (c.receiver_user_id = #{userId} or c.receiver_user_id is null)
     and r.user_id = #{userId}
     and c.originator_user_id != #{userId}
