@@ -415,9 +415,7 @@ public class UserDynamicServiceImpl implements UserDynamicService {
                 commentMessageDto.setClassName(studentInfo.getData().getClassName());
             } else {
                 User user = userMapper.selectByUserId(userDynamicComment.getOriginatorUserId());
-
                 commentMessageDto.setOriginatorAvatar(user.getAvatar());
-                commentMessageDto.setOriginatorName(user.getName());
 
                 UserResult<AgencyClassDto> classInfo = agencyFeign.getAgencyClassInfo(classId);
                 if (!CommonErrors.SUCCESS.getErrorCode().equals(classInfo.getStatus())) {
