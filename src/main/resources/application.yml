@@ -97,6 +97,7 @@ eureka:
       defaultZone: http://eureka-service:9001/eureka/
 server:
   port: 8085
+  max-http-header-size: 20480
 
 php:
   url: http://47.92.82.130/sms/index.php/home/Demo/
